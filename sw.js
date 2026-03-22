@@ -1,46 +1,62 @@
-const CACHE_NAME = 'aquacontrol-v3';
+// HidroSmart Service Worker v1.4.0
+const CACHE_NAME = 'hidrosmart-v1.4.0';
+const ASSETS = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-180.png',
+  './icons/icon-32.png',
+  './icons/icon-16.png',
+  './icons/icon.svg',
+  './icons/favicon.ico'
+];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then(cache =>
-      cache.addAll(['./','./index.html','./manifest.json'])
-    ).then(() => self.skipWaiting())
+// Instalar — cachear todos os assets
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    // Limpar caches antigas ao ativar nova versão
+// Ativar — limpar caches antigos
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => clients.claim())
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  // Para navegação (pull-to-refresh): network first, fallback para cache
-  if (e.request.mode === 'navigate') {
-    e.respondWith(
-      fetch(e.request)
-        .then(res => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
-          return res;
-        })
-        .catch(() => caches.match('./index.html'))
-    );
-    return;
-  }
-  // Para outros assets: cache first
-  e.respondWith(
-    caches.match(e.request).then(cached => {
+// Fetch — cache first, fallback para rede
+self.addEventListener('fetch', event => {
+  // Ignorar requisições não-GET e externas (GitHub API, Anthropic API)
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== location.origin) return;
+
+  event.respondWith(
+    caches.match(event.request).then(cached => {
       if (cached) return cached;
-      return fetch(e.request).then(res => {
-        if (res && res.status === 200) {
-          caches.open(CACHE_NAME).then(c => c.put(e.request, res.clone()));
+      return fetch(event.request).then(response => {
+        // Cachear respostas válidas
+        if (response && response.status === 200 && response.type === 'basic') {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
-        return res;
+        return response;
+      }).catch(() => {
+        // Offline fallback — retornar index.html para navegação
+        if (event.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
       });
     })
   );
