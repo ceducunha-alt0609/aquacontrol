@@ -1687,7 +1687,7 @@ ao ciclo anterior.">?</span></div>
         <div class="page-sub" style="margin-bottom:16px">Personalize o sistema</div>
 
         <!-- ── ACORDEÃO: Dados gerais ── -->
-        <div class="cfg-accordion open" id="acc-dados">
+        <div class="cfg-accordion" id="acc-dados">
           <div class="cfg-acc-hdr" onclick="toggleAcc('acc-dados')">
             <div class="cfg-acc-hdr-left">
               <span style="font-size:18px">🏢</span>
@@ -1830,6 +1830,31 @@ ao ciclo anterior.">?</span></div>
         </div>
 
         <!-- ── ACORDEÃO: Sincronização ── -->
+        <!-- ── Instalação do app ── -->
+        <div class="cfg-accordion" id="acc-install">
+          <div class="cfg-acc-hdr" onclick="toggleAcc('acc-install')">
+            <div class="cfg-acc-hdr-left">
+              <span style="font-size:18px">📲</span>
+              <div>
+                <div class="cfg-acc-title">Instalar app</div>
+                <div class="cfg-acc-sub">Adicionar à tela inicial ou ao desktop</div>
+              </div>
+            </div>
+            <svg class="cfg-acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="cfg-acc-body">
+            <div class="cfg-acc-inner">
+              <div id="install-cfg-status" style="margin-bottom:14px"></div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn btn-p" id="install-cfg-btn" onclick="installFromCfg()" style="display:none">
+                  ⬇ Instalar HidroSmart
+                </button>
+              </div>
+              <div class="cfg-hint" id="install-cfg-hint" style="margin-top:10px"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="cfg-accordion" id="acc-sync">
           <div class="cfg-acc-hdr" onclick="toggleAcc('acc-sync')">
             <div class="cfg-acc-hdr-left">
@@ -2284,6 +2309,8 @@ function toggleAcc(id){
   const open=el.classList.toggle('open');
   const body=el.querySelector('.cfg-acc-body');
   if(body)body.style.maxHeight=open?(body.scrollHeight+40)+'px':'0';
+  // Atualizar status de instalação ao abrir
+  if(id==='acc-install'&&open) setTimeout(updateInstallCfg,50);
 }
 function openAcc(id){
   const el=document.getElementById(id);
@@ -2293,8 +2320,7 @@ function openAcc(id){
   if(body)body.style.maxHeight=(body.scrollHeight+40)+'px';
 }
 function initAccordions(){
-  // Abrir o primeiro por padrão
-  openAcc('acc-dados');
+  // Nenhum acordeão aberto por padrão
 }
 
 function initSidebarCollapse(){
@@ -4495,6 +4521,7 @@ function loadCfg(){
   // Economias
   const _sv2=document.getElementById('cfg-economias');if(_sv2)_sv2.value=S.config.economias||'';
   initAccordions();
+  updateInstallCfg();
   const vEl=document.getElementById('cfg-version');if(vEl)vEl.textContent=APP_VERSION;
   const bEl=document.getElementById('cfg-build');if(bEl)bEl.textContent=APP_BUILD;
   // Tema — atualiza botões
@@ -5807,14 +5834,67 @@ function renderTankInto(acc,meta,svg){
   // ── Service Worker — desativado (sw.js não disponível em single-file) ──
 
   // ── Banner de instalação ──────────────────────────────────────
-  let _installPrompt=null;
+  window._installPrompt=null;
 
   // Captura o evento antes que o navegador mostre por conta própria
   window.addEventListener('beforeinstallprompt',e=>{
     e.preventDefault();
-    _installPrompt=e;
+    window._installPrompt=e;
     showInstallBanner();
+    updateInstallCfg();
   });
+
+  window.addEventListener('appinstalled',()=>{
+    window._installPrompt=null;
+    showToast('✓ HidroSmart instalado com sucesso!');
+    updateInstallCfg();
+  });
+  // Expor globalmente para ser chamada pelo toggleAcc
+  window.updateInstallCfg=updateInstallCfg;
+  window.installFromCfg=installFromCfg;
+
+  function updateInstallCfg(){
+    const btn=document.getElementById('install-cfg-btn');
+    const status=document.getElementById('install-cfg-status');
+    const hint=document.getElementById('install-cfg-hint');
+    if(!btn||!status)return;
+    const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+    const ua=navigator.userAgent;
+    const isChrome=ua.includes('Chrome')&&!ua.includes('Edg');
+    const isEdge=ua.includes('Edg');
+    const isSafari=ua.includes('Safari')&&!ua.includes('Chrome');
+    const isFirefox=ua.includes('Firefox');
+    if(isStandalone){
+      status.innerHTML='<div class="leit-preview ok" style="display:flex"><span class="lp-main">✓ App instalado</span><span class="lp-sep">·</span><span class="lp-detail">rodando em modo standalone</span></div>';
+      btn.style.display='none';
+      if(hint)hint.textContent='';
+    } else if(window._installPrompt){
+      status.innerHTML='<div class="leit-preview" style="display:flex;background:var(--blue-l);border-color:var(--blue-m)"><span class="lp-main" style="color:var(--blue)">Pronto para instalar</span><span class="lp-sep">·</span><span class="lp-detail">clique no botão abaixo</span></div>';
+      btn.style.display='inline-flex';
+      if(hint)hint.textContent='O app será adicionado com ícone próprio, sem barra do navegador.';
+    } else if(isSafari){
+      status.innerHTML='';btn.style.display='none';
+      if(hint)hint.innerHTML='📱 <strong>Safari:</strong> toque em <strong>⎋ Compartilhar</strong> → <strong>Adicionar à Tela de Início</strong>';
+    } else if(isFirefox){
+      status.innerHTML='';btn.style.display='none';
+      if(hint)hint.innerHTML='⚠️ Firefox não suporta instalação de PWA. Use Chrome ou Edge.';
+    } else {
+      status.innerHTML='';btn.style.display='none';
+      if(hint)hint.innerHTML='🖥️ Clique no ícone <strong>⊕</strong> na barra de endereço do Chrome/Edge para instalar.<br><span style="font-size:11px;color:var(--text3)">Se não aparecer, recarregue a página.</span>';
+    }
+  }
+
+  async function installFromCfg(){
+    if(!window._installPrompt)return;
+    window._installPrompt.prompt();
+    const{outcome}=await window._installPrompt.userChoice;
+    if(outcome==='accepted'){
+      showToast('✓ HidroSmart instalado!');
+      localStorage.setItem('aqc_install_dismissed','permanent');
+      window._installPrompt=null;
+    }
+    updateInstallCfg();
+  }
 
   function showInstallBanner(){
     // Não mostra se já instalado ou se já dispensou recentemente
@@ -5853,7 +5933,7 @@ function renderTankInto(acc,meta,svg){
         showToast('✓ HidroSmart instalado!');
         localStorage.setItem('aqc_install_dismissed','permanent');
       }
-      banner.remove();_installPrompt=null;
+      banner.remove();window._installPrompt=null;
     };
     document.getElementById('install-dismiss').onclick=()=>{
       banner.remove();

@@ -27,6 +27,12 @@
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "screenshots": [
@@ -52,34 +58,21 @@
       "label": "Dashboard Desktop"
     }
   ],
-  "categories": [
-    "utilities",
-    "productivity"
-  ],
+  "categories": ["utilities", "productivity"],
   "shortcuts": [
     {
       "name": "Lançar leitura",
       "short_name": "Lançar",
       "description": "Registrar nova leitura do hidrômetro",
       "url": "./#lanc",
-      "icons": [
-        {
-          "src": "icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
       "description": "Ver resumo do ciclo atual",
       "url": "./#dash",
-      "icons": [
-        {
-          "src": "icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
