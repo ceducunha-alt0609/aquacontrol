@@ -9,11 +9,9 @@ const ASSETS = [
   './icons/icon-180.png',
   './icons/icon-32.png',
   './icons/icon-16.png',
-  './icons/icon.svg',
   './icons/favicon.ico'
 ];
 
-// Instalar — cachear todos os assets
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -22,22 +20,17 @@ self.addEventListener('install', event => {
   );
 });
 
-// Ativar — limpar caches antigos
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );
 });
 
-// Fetch — cache first, fallback para rede
 self.addEventListener('fetch', event => {
-  // Ignorar requisições não-GET e externas (GitHub API, Anthropic API)
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if (url.origin !== location.origin) return;
@@ -46,14 +39,12 @@ self.addEventListener('fetch', event => {
     caches.match(event.request).then(cached => {
       if (cached) return cached;
       return fetch(event.request).then(response => {
-        // Cachear respostas válidas
         if (response && response.status === 200 && response.type === 'basic') {
           const clone = response.clone();
           caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         }
         return response;
       }).catch(() => {
-        // Offline fallback — retornar index.html para navegação
         if (event.request.mode === 'navigate') {
           return caches.match('./index.html');
         }
