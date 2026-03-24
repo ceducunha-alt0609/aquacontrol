@@ -1202,20 +1202,221 @@ tbody tr:hover td{background:var(--blue-l)!important}
 .splash-bar-fill{height:100%;width:0%;background:#005EC0;border-radius:2px;animation:splash-load 1.2s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes splash-load{0%{width:0%}60%{width:85%}100%{width:100%}}
 .splash-accent{width:100%;height:4px;background:linear-gradient(90deg,#0040A0,#0088DD);position:absolute;bottom:0;left:0}
+
+/* ═══════════════════════════════════════
+   HIDROSMART — NOVO DASHBOARD v2
+   ═══════════════════════════════════════ */
+
+/* Score hero */
+.hs-hero{background:linear-gradient(135deg,#002d6e 0%,#004fab 45%,#005ec0 75%,#0077d4 100%);border-radius:var(--rl);padding:22px 24px;color:#fff;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,92,197,.28)}
+.hs-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+.hs-hero::after{content:'';position:absolute;bottom:-60px;left:20%;width:200px;height:200px;border-radius:50%;background:rgba(0,0,0,.07);pointer-events:none}
+.hs-hero-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1;flex-wrap:wrap}
+.hs-score-block{}
+.hs-score-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-bottom:4px}
+.hs-score-num{font-family:var(--display);font-size:64px;font-weight:800;letter-spacing:-3px;line-height:1}
+.hs-score-num span{font-size:22px;font-weight:400;opacity:.55;letter-spacing:0}
+.hs-score-lbl{font-size:13px;opacity:.8;margin:4px 0 12px}
+.hs-hero-badges{display:flex;gap:7px;flex-wrap:wrap}
+.hs-badge{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.12);white-space:nowrap}
+.hs-badge.ok{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.35)}
+.hs-badge.warn{background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.35)}
+.hs-badge.crit{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.35)}
+.hs-hero-right{text-align:right}
+.hs-hero-main-val{font-family:var(--display);font-size:36px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+.hs-hero-main-lbl{font-size:10px;opacity:.6;text-transform:uppercase;letter-spacing:.07em;margin-top:2px;margin-bottom:10px}
+.hs-hero-prog-wrap{min-width:180px}
+.hs-hero-prog-meta{display:flex;justify-content:space-between;font-size:10px;opacity:.65;margin-bottom:4px}
+.hs-hero-prog{height:6px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}
+.hs-hero-prog-fill{height:100%;border-radius:3px;background:rgba(255,255,255,.9);transition:width .8s var(--ease-out)}
+.hs-hero-prog-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+.hs-hero-prog-fill.crit{background:linear-gradient(90deg,#f87171,#ef4444)}
+
+/* Alert strip */
+.hs-alerts{display:flex;flex-direction:column;gap:8px}
+.hs-alert{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;border-left:3.5px solid;font-size:12.5px;animation:fadeUp .3s ease}
+.hs-alert.crit{background:#fff5f5;border-color:#dc2626;color:#7f1d1d}
+.hs-alert.warn{background:#fffbeb;border-color:#d97706;color:#78350f}
+.hs-alert.info{background:#eff6ff;border-color:#2563eb;color:#1e3a8a}
+.hs-alert.ok{background:#f0fdf4;border-color:#16a34a;color:#14532d}
+.hs-alert-icon{font-size:15px;flex-shrink:0}
+.hs-alert-body{flex:1;min-width:0}
+.hs-alert-title{font-weight:700;font-size:12px;margin-bottom:1px}
+.hs-alert-sub{font-size:11px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-alert-chip{padding:2px 9px;border-radius:10px;font-size:9px;font-weight:700;flex-shrink:0;text-transform:uppercase;letter-spacing:.05em}
+.hs-alert.crit .hs-alert-chip{background:#dc2626;color:#fff}
+.hs-alert.warn .hs-alert-chip{background:#d97706;color:#fff}
+.hs-alert.info .hs-alert-chip{background:#2563eb;color:#fff}
+.hs-alert.ok .hs-alert-chip{background:#16a34a;color:#fff}
+
+/* KPI cards v2 */
+.hs-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.hs-kpi{background:var(--bg2);border-radius:var(--rl);padding:14px 16px;border:1.5px solid var(--border);position:relative;overflow:hidden;transition:transform .2s var(--ease-out),box-shadow .2s;cursor:default}
+.hs-kpi:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,40,110,.1)}
+.hs-kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--rl) var(--rl) 0 0}
+.hs-kpi.kpi-ok{border-color:rgba(22,163,74,.25)}.hs-kpi.kpi-ok::before{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.hs-kpi.kpi-warn{border-color:rgba(217,119,6,.3)}.hs-kpi.kpi-warn::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.hs-kpi.kpi-crit{border-color:rgba(220,38,38,.3)}.hs-kpi.kpi-crit::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.hs-kpi.kpi-neu{border-color:var(--border)}.hs-kpi.kpi-neu::before{background:linear-gradient(90deg,var(--blue),var(--blue-m))}
+.hs-kpi-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:9px;font-size:15px;flex-shrink:0}
+.hs-kpi.kpi-ok .hs-kpi-icon{background:#dcfce7;color:#15803d}
+.hs-kpi.kpi-warn .hs-kpi-icon{background:#fef3c7;color:#92400e}
+.hs-kpi.kpi-crit .hs-kpi-icon{background:#fee2e2;color:#991b1b}
+.hs-kpi.kpi-neu .hs-kpi-icon{background:var(--blue-l);color:var(--blue)}
+.hs-kpi-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:4px}
+.hs-kpi-val{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1;color:var(--text)}
+.hs-kpi-val small{font-size:13px;font-weight:400;color:var(--text3);letter-spacing:0}
+.hs-kpi-trend{font-size:11px;font-weight:600;margin-top:6px;display:flex;align-items:center;gap:3px}
+.hs-kpi-trend.up{color:#dc2626}.hs-kpi-trend.dn{color:#16a34a}.hs-kpi-trend.eq{color:var(--text3)}
+
+/* Charts grid */
+.hs-charts{display:grid;grid-template-columns:1.7fr 1fr;gap:12px}
+.hs-chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px 18px;box-shadow:var(--sh)}
+.hs-chart-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px}
+.hs-chart-title{font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.hs-chart-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.hs-chart-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.hs-legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text2)}
+.hs-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* Bottom cards */
+.hs-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hs-mini{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;box-shadow:var(--sh)}
+.hs-mini-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:12px}
+
+/* Intelligence list */
+.hs-intel-list{display:flex;flex-direction:column;gap:6px}
+.hs-intel-item{display:flex;align-items:center;justify-content:space-between;padding:6px 9px;border-radius:8px;background:var(--bg3)}
+.hs-intel-lbl{font-size:12px;color:var(--text2)}
+.hs-intel-val{font-size:12px;font-weight:700;color:var(--text)}
+.hs-intel-val.ok{color:#15803d}.hs-intel-val.warn{color:#92400e}.hs-intel-val.crit{color:#991b1b}
+
+/* Hist bars v2 */
+.hs-hist-bars{display:flex;align-items:flex-end;gap:6px;height:70px;margin-bottom:6px}
+.hs-hist-bar{flex:1;border-radius:3px 3px 0 0;min-height:4px;transition:height .5s cubic-bezier(.34,1.56,.64,1);cursor:default;position:relative}
+.hs-hist-bar.cur{background:var(--blue)}
+.hs-hist-bar:not(.cur){background:var(--blue-m)}
+.hs-hist-bar.over{background:var(--red)}
+.hs-hist-lbl-row{display:flex;justify-content:space-between;font-size:9px;color:var(--text3)}
+
+/* Shortcuts v2 */
+.hs-shortcuts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.hs-shortcut{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 8px;text-align:center;cursor:pointer;transition:all .2s var(--ease-out);position:relative;overflow:hidden}
+.hs-shortcut:hover{border-color:var(--blue-m);background:var(--blue-l);transform:translateY(-2px);box-shadow:var(--sh2)}
+.hs-shortcut:active{transform:none}
+.hs-shortcut-icon{font-size:22px;margin-bottom:5px}
+.hs-shortcut-lbl{font-size:11px;font-weight:600;color:var(--text2)}
+.hs-shortcut:hover .hs-shortcut-lbl{color:var(--blue-d)}
+
+/* Responsive */
+@media(max-width:600px){
+  .hs-kpis{grid-template-columns:1fr 1fr}
+  .hs-charts{grid-template-columns:1fr}
+  .hs-bottom{grid-template-columns:1fr}
+  .hs-hero-inner{flex-direction:column;align-items:flex-start}
+  .hs-hero-right{text-align:left}
+  .hs-score-num{font-size:48px}
+  .hs-hero-main-val{font-size:28px}
+}
+@media(max-width:400px){
+  .hs-kpis{grid-template-columns:1fr 1fr}
+  .hs-kpi-val{font-size:22px}
+}
+
+/* ═══════════════════════════════════════
+   IoT SENSOR PANEL
+   ═══════════════════════════════════════ */
+.iot-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.iot-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.iot-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rl);padding:16px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s}
+.iot-card:hover{box-shadow:var(--sh2);transform:translateY(-1px)}
+.iot-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--rl) var(--rl) 0 0}
+.iot-card.ok::before{background:linear-gradient(90deg,#22c55e,#4ade80)}
+.iot-card.warn::before{background:linear-gradient(90deg,#f59e0b,#fbbf24)}
+.iot-card.crit::before{background:linear-gradient(90deg,#ef4444,#f87171)}
+.iot-card.offline::before{background:var(--border2)}
+.iot-card.ok{border-color:rgba(22,163,74,.25)}
+.iot-card.warn{border-color:rgba(217,119,6,.3)}
+.iot-card.crit{border-color:rgba(220,38,38,.3)}
+.iot-card.offline{border-color:var(--border);opacity:.7}
+.iot-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.iot-card-title{font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.iot-card-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.iot-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.iot-status-dot.ok{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.2)}
+.iot-status-dot.warn{background:#f59e0b;box-shadow:0 0 0 3px rgba(245,158,11,.2)}
+.iot-status-dot.crit{background:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.2);animation:iot-pulse 1.4s ease-in-out infinite}
+.iot-status-dot.offline{background:var(--border2)}
+@keyframes iot-pulse{0%,100%{box-shadow:0 0 0 3px rgba(239,68,68,.2)}50%{box-shadow:0 0 0 6px rgba(239,68,68,.1)}}
+.iot-level-num{font-family:var(--display);font-size:36px;font-weight:800;letter-spacing:-1.5px;line-height:1;color:var(--text);margin-bottom:3px}
+.iot-level-num small{font-size:16px;font-weight:400;color:var(--text3);letter-spacing:0}
+.iot-level-sub{font-size:11px;color:var(--text3);margin-bottom:10px}
+.iot-bar-wrap{margin-bottom:6px}
+.iot-bar-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden}
+.iot-bar-fill{height:100%;border-radius:4px;transition:width .8s var(--ease-out),background .4s}
+.iot-bar-labels{display:flex;justify-content:space-between;font-size:9px;font-family:var(--mono);color:var(--text3);margin-top:3px}
+.iot-meta-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.iot-pump-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:10px;font-weight:700}
+.iot-pump-badge.on{background:rgba(34,197,94,.12);color:#15803d;border:1px solid rgba(22,163,74,.2)}
+.iot-pump-badge.off{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.iot-pump-badge.blocked{background:rgba(239,68,68,.1);color:#991b1b;border:1px solid rgba(220,38,38,.2)}
+.iot-pump-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.iot-alert-strip{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.iot-alert{display:flex;align-items:center;gap:10px;padding:9px 13px;border-radius:9px;border-left:3px solid;font-size:12px}
+.iot-alert.crit{background:#fff5f5;border-color:#dc2626;color:#7f1d1d}
+.iot-alert.warn{background:#fffbeb;border-color:#d97706;color:#78350f}
+.iot-alert.ok{background:#f0fdf4;border-color:#16a34a;color:#14532d}
+.iot-alert.info{background:#eff6ff;border-color:#2563eb;color:#1e3a8a}
+.iot-alert-icon{font-size:14px;flex-shrink:0}
+.iot-alert-body{flex:1}
+.iot-alert-title{font-weight:700;font-size:11.5px}
+.iot-alert-ts{font-size:10px;opacity:.65;margin-top:1px}
+.iot-chip{padding:2px 8px;border-radius:9px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+.iot-alert.crit .iot-chip{background:#dc2626;color:#fff}
+.iot-alert.warn .iot-chip{background:#d97706;color:#fff}
+.iot-alert.ok .iot-chip{background:#16a34a;color:#fff}
+.iot-alert.info .iot-chip{background:#2563eb;color:#fff}
+.iot-hero{background:linear-gradient(135deg,#003d8f 0%,#0062cc 60%,#0080f5 100%);border-radius:var(--rl);padding:20px 24px;color:#fff;margin-bottom:14px;position:relative;overflow:hidden}
+.iot-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.iot-hero-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;position:relative;z-index:1}
+.iot-hero-score{font-family:var(--display);font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1}
+.iot-hero-score span{font-size:18px;font-weight:400;opacity:.55}
+.iot-hero-lbl{font-size:11px;opacity:.7;margin-top:2px;text-transform:uppercase;letter-spacing:.07em}
+.iot-hero-stats{display:flex;gap:20px;flex-wrap:wrap}
+.iot-hero-stat{text-align:center}
+.iot-hero-stat-val{font-family:var(--display);font-size:22px;font-weight:800;letter-spacing:-0.5px}
+.iot-hero-stat-lbl{font-size:9px;opacity:.6;text-transform:uppercase;letter-spacing:.06em;margin-top:1px}
+.iot-hero-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.iot-hero-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.12)}
+.iot-hero-badge.ok{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.35)}
+.iot-hero-badge.warn{background:rgba(245,158,11,.2);border-color:rgba(245,158,11,.35)}
+.iot-hero-badge.crit{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.35)}
+.iot-section-title{font-family:var(--display);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin:16px 0 8px}
+.iot-cfg-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-top:14px}
+.iot-cfg-title{font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.iot-cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.iot-connect-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:var(--display);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s var(--ease-out);margin-top:12px}
+.iot-connect-btn:hover{background:var(--blue-d);transform:translateY(-1px)}
+.iot-connect-btn.simulated{background:var(--green);color:#fff}
+.iot-sim-banner{background:var(--amber-l);border:1px solid rgba(217,119,6,.3);border-radius:var(--r);padding:9px 13px;font-size:11px;color:var(--amber);display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.iot-history-row{display:flex;align-items:flex-end;gap:4px;height:50px;margin-top:6px}
+.iot-history-bar{flex:1;border-radius:2px 2px 0 0;min-height:3px;transition:height .4s}
+@media(max-width:600px){
+  .iot-grid{grid-template-columns:1fr 1fr}
+  .iot-main-grid{grid-template-columns:1fr}
+  .iot-hero-score{font-size:40px}
+  .iot-cfg-grid{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+  .iot-grid{grid-template-columns:1fr}
+}
 </style>
 
 
 
 
 <script>
-// Registrar Service Worker
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('[HidroSmart] SW registrado:', reg.scope))
-      .catch(err => console.warn('[HidroSmart] SW falhou:', err));
-  });
-}
+// Service Worker desativado (app single-file — sw.js externo não disponível)
 </script>
 
 <style id="mobile-extra-styles">
@@ -1507,6 +1708,16 @@ img, svg { -webkit-user-drag: none; }
         <div class="nav-divider"></div>
 
         <div class="nav-group">
+          <div class="nav-group-label">IoT</div>
+          <button class="nav-item" data-panel="iot" data-tip="Sensores IoT" onclick="showPanel('iot');closeSidebar()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+            <span class="nav-item-label">Sensores IoT</span>
+          </button>
+        </div>
+
+        <div class="nav-divider"></div>
+
+        <div class="nav-group">
           <div class="nav-group-label">Sistema</div>
           <button class="nav-item" data-panel="backup" data-tip="Backup / Export" onclick="showPanel('backup');closeSidebar()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
@@ -1552,132 +1763,118 @@ img, svg { -webkit-user-drag: none; }
 
       <!-- ── DASHBOARD ── -->
       <div id="panel-dash" class="panel active">
-        <div class="dash-home" id="dash-home">
-          <!-- Hero consumo -->
-          <div class="dash-hero" id="dash-hero-card" style="position:relative;overflow:hidden">
-          <svg style="position:absolute;bottom:0;left:0;width:100%;height:60px;opacity:.07;pointer-events:none" viewBox="0 0 400 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 30 Q50 10 100 30 Q150 50 200 30 Q250 10 300 30 Q350 50 400 30 L400 60 L0 60Z" fill="white"/>
-            <path d="M0 40 Q60 20 120 40 Q180 60 240 40 Q300 20 360 40 Q390 50 400 40 L400 60 L0 60Z" fill="white" opacity=".6"/>
-          </svg>
-            <div class="dash-hero-top">
-              <div>
-                <div class="dash-hero-name" id="dash-cond-name">HidroSmart</div>
-                <div class="dash-hero-val"><span id="dash-acc">—</span> <span class="dash-hero-unit">m³</span></div>
-                <div class="dash-hero-sub" id="dash-ciclo-sub">ciclo atual</div>
-              </div>
-              <div>
-                <div class="dash-hero-badge" id="dash-status-badge">—</div>
-                <div style="font-size:11px;opacity:.65;margin-top:8px;text-align:right" id="dash-venc"></div>
-              </div>
-            </div>
-            <div class="dash-hero-prog"><div class="dash-hero-prog-fill" id="dash-prog-fill" style="width:0%"></div></div>
-            <div class="dash-hero-prog-labels"><span>0</span><span id="dash-prog-mid"></span><span id="dash-prog-max">—</span></div>
-          </div>
+        <div class="dash-home" id="dash-home" style="display:flex;flex-direction:column;gap:14px">
 
-          <!-- KPIs rápidos -->
-          <div class="dash-kpis">
-            <div class="dash-kpi" id="dash-kpi-med">
-              <div class="dash-kpi-lbl"><span class="dash-kpi-dot"></span>Média/dia</div>
-              <div class="dash-kpi-val" id="dash-med">—</div>
-              <div class="dash-kpi-sub" id="dash-med-sub">m³</div>
-              <div class="dash-kpi-bar"></div>
-            </div>
-            <div class="dash-kpi" id="dash-kpi-dias">
-              <div class="dash-kpi-lbl"><span class="dash-kpi-dot"></span>Dias restantes</div>
-              <div class="dash-kpi-val" id="dash-dias-rest">—</div>
-              <div class="dash-kpi-sub" id="dash-dias-rest-sub">até previsão</div>
-              <div class="dash-kpi-bar"></div>
-            </div>
-            <div class="dash-kpi" id="dash-kpi-proj">
-              <div class="dash-kpi-lbl"><span class="dash-kpi-dot"></span>Projeção</div>
-              <div class="dash-kpi-val" id="dash-proj">—</div>
-              <div class="dash-kpi-sub" id="dash-proj-sub">m³ no ciclo</div>
-              <div class="dash-kpi-bar"></div>
-            </div>
-            <div class="dash-kpi" id="dash-kpi-custo">
-              <div class="dash-kpi-lbl"><span class="dash-kpi-dot"></span>Custo total est.</div>
-              <div class="dash-kpi-val" id="dash-custo">—</div>
-              <div class="dash-kpi-sub" id="dash-custo-sub">R$ água+esgoto</div>
-              <div class="dash-kpi-bar"></div>
-            </div>
-          </div>
-
-          <!-- Tanque + Financeiro -->
-          <div class="dash-mid">
-            <div class="dash-tank-card" id="dash-tank-card">
-              <div class="dash-tank-title">Nível do reservatório</div>
-              <canvas id="dash-tank-canvas" width="260" height="300" style="max-width:200px;width:100%;height:auto;border-radius:12px;display:block"></canvas>
-              <div class="dash-tank-info">
-                <span class="dash-tank-m3" id="dash-tank-pct">0 m³</span>
-                <span class="dash-tank-pct-badge" id="dash-tank-pct-badge">0%</span>
+          <!-- ── HERO SCORE ── -->
+          <div class="hs-hero" id="hs-hero">
+            <div class="hs-hero-inner">
+              <div class="hs-score-block">
+                <div class="hs-score-eyebrow">Saúde do sistema · ciclo atual</div>
+                <div class="hs-score-num" id="hs-score-num">—<span>/100</span></div>
+                <div class="hs-score-lbl" id="hs-score-lbl">calculando...</div>
+                <div class="hs-hero-badges" id="hs-hero-badges"></div>
               </div>
-              <div class="dash-tank-prog-wrap">
-                <div class="dash-tank-prog"><div class="dash-tank-prog-fill" id="dash-tank-prog-fill" style="width:0%"></div></div>
-                <div class="dash-tank-prog-labels"><span>0</span><span id="dash-tank-prog-mid"></span><span id="dash-tank-prog-max">—</span></div>
-              </div>
-              <div style="font-size:11px;color:var(--text3)" id="dash-tank-desc">de 0 m³</div>
-            </div>
-            <div class="dash-fin-card">
-              <div class="dash-fin-title">Custo estimado do ciclo</div>
-              <div id="dash-fin-rows"></div>
-              <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
-                <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Custo por unidade (est.)</div>
-                <div style="font-family:var(--display);font-size:22px;font-weight:800;color:var(--blue)" id="dash-custo-unit">—</div>
-                <div style="font-size:11px;color:var(--text3)" id="dash-unit-sub">por economia</div>
+              <div class="hs-hero-right">
+                <div class="hs-hero-main-val"><span id="hs-acc">—</span> <span style="font-size:18px;font-weight:400;opacity:.7">m³</span></div>
+                <div class="hs-hero-main-lbl" id="hs-ciclo-lbl">consumido no ciclo</div>
+                <div class="hs-hero-prog-wrap" id="hs-prog-wrap" style="display:none">
+                  <div class="hs-hero-prog-meta">
+                    <span>0 m³</span><span id="hs-prog-pct">0%</span><span id="hs-prog-max">—</span>
+                  </div>
+                  <div class="hs-hero-prog">
+                    <div class="hs-hero-prog-fill" id="hs-prog-fill" style="width:0%"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Histórico mini -->
-          <div class="dash-hist-card">
-            <div class="dash-hist-hdr">
-              <div class="dash-hist-title">Últimos 6 ciclos</div>
-              <div class="dash-hist-legend">
-                <div class="dash-hist-legend-item"><div class="dash-hist-legend-dot" style="background:var(--blue)"></div>atual</div>
-                <div class="dash-hist-legend-item"><div class="dash-hist-legend-dot" style="background:var(--blue-m)"></div>anteriores</div>
-                <div class="dash-hist-legend-item"><div class="dash-hist-legend-dot" style="background:var(--border2);border-top:1.5px dashed var(--border2);height:0"></div>limite</div>
+          <!-- ── ALERTAS INTELIGENTES ── -->
+          <div class="hs-alerts" id="hs-alerts"></div>
+
+          <!-- ── KPI CARDS ── -->
+          <div class="hs-kpis">
+            <div class="hs-kpi kpi-neu" id="hs-kpi-acc">
+              <div class="hs-kpi-icon">💧</div>
+              <div class="hs-kpi-label">Consumo do ciclo</div>
+              <div class="hs-kpi-val" id="hs-kv-acc">—<small> m³</small></div>
+              <div class="hs-kpi-trend eq" id="hs-kt-acc">—</div>
+            </div>
+            <div class="hs-kpi kpi-neu" id="hs-kpi-med">
+              <div class="hs-kpi-icon">📊</div>
+              <div class="hs-kpi-label">Média diária</div>
+              <div class="hs-kpi-val" id="hs-kv-med">—<small> m³/dia</small></div>
+              <div class="hs-kpi-trend eq" id="hs-kt-med">—</div>
+            </div>
+            <div class="hs-kpi kpi-neu" id="hs-kpi-proj">
+              <div class="hs-kpi-icon">📈</div>
+              <div class="hs-kpi-label">Projeção fechamento</div>
+              <div class="hs-kpi-val" id="hs-kv-proj">—<small> m³</small></div>
+              <div class="hs-kpi-trend eq" id="hs-kt-proj">—</div>
+            </div>
+            <div class="hs-kpi kpi-neu" id="hs-kpi-custo">
+              <div class="hs-kpi-icon">💰</div>
+              <div class="hs-kpi-label">Custo estimado</div>
+              <div class="hs-kpi-val" id="hs-kv-custo">—</div>
+              <div class="hs-kpi-trend eq" id="hs-kt-custo">—</div>
+            </div>
+          </div>
+
+          <!-- ── CHARTS ── -->
+          <div class="hs-charts">
+            <!-- Daily chart -->
+            <div class="hs-chart-card">
+              <div class="hs-chart-hdr">
+                <div>
+                  <div class="hs-chart-title">Consumo diário + projeção</div>
+                  <div class="hs-chart-sub">m³/dia · pontilhado = projeção</div>
+                </div>
+              </div>
+              <div class="hs-chart-legend">
+                <span class="hs-legend-item"><span class="hs-legend-dot" style="background:#0062cc"></span>Real</span>
+                <span class="hs-legend-item"><span class="hs-legend-dot" style="background:#f59e0b;border:1px dashed #f59e0b;background:transparent"></span>Projeção</span>
+                <span class="hs-legend-item"><span class="hs-legend-dot" style="background:#22c55e;opacity:.6"></span>Média histórica</span>
+              </div>
+              <div style="position:relative;height:180px"><canvas id="hs-daily-chart"></canvas></div>
+            </div>
+            <!-- Monthly chart -->
+            <div class="hs-chart-card">
+              <div class="hs-chart-hdr">
+                <div>
+                  <div class="hs-chart-title">Comparativo mensal</div>
+                  <div class="hs-chart-sub">últimos ciclos · linha = média</div>
+                </div>
+              </div>
+              <div style="position:relative;height:210px"><canvas id="hs-monthly-chart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- ── BOTTOM ROW ── -->
+          <div class="hs-bottom">
+            <!-- Histórico ciclos -->
+            <div class="hs-mini">
+              <div class="hs-mini-title">Histórico de ciclos</div>
+              <div class="hs-hist-bars" id="hs-hist-bars"></div>
+              <div class="hs-hist-lbl-row"><span id="hs-hist-lbl-start">—</span><span>atual</span></div>
+            </div>
+            <!-- Inteligência -->
+            <div class="hs-mini">
+              <div class="hs-mini-title">Inteligência automática</div>
+              <div class="hs-intel-list" id="hs-intel-list"></div>
+            </div>
+            <!-- Distribuição / financeiro -->
+            <div class="hs-mini">
+              <div class="hs-mini-title">Custo estimado</div>
+              <div id="hs-fin-detail" style="font-size:11px;color:var(--text3)">Configure a tarifa em Configurações</div>
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)" id="hs-custo-unit-wrap" style="display:none">
+                <div style="font-size:10px;color:var(--text3);margin-bottom:2px">Por unidade</div>
+                <div style="font-family:var(--display);font-size:22px;font-weight:800;color:var(--blue)" id="hs-custo-unit">—</div>
+                <div style="font-size:10px;color:var(--text3)" id="hs-custo-unit-sub"></div>
               </div>
             </div>
-            <div class="dash-hist-area">
-              <div class="dash-hist-meta-line" id="dash-hist-meta-line" style="display:none"><span class="dash-hist-meta-lbl" id="dash-hist-meta-lbl"></span></div>
-              <div class="dash-hist-bars" id="dash-hist-bars"></div>
-            </div>
           </div>
 
-          <!-- Card de eficiência (novo) -->
-          <div class="dash-eff-card" id="dash-eff-card" style="display:none">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-              <div style="font-family:var(--display);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green-d)">📉 Eficiência do ciclo</div>
-              <div class="dash-eff-pct" id="dash-eff-pct">—</div>
-            </div>
-            <div class="dash-eff-meter">
-              <div class="dash-eff-lbl" id="dash-eff-lbl">em relação ao limite</div>
-              <div class="dash-eff-bar"><div class="dash-eff-fill" id="dash-eff-fill" style="width:0%"></div></div>
-            </div>
-            <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
-              <div style="font-size:11px;color:var(--green-d)" id="dash-eff-tip"></div>
-            </div>
-          </div>
 
-          <!-- Atalhos -->
-          <div class="dash-shortcuts">
-            <div class="dash-shortcut" onclick="showPanel('lanc')">
-              <div class="dash-shortcut-icon">✏️</div>
-              <div class="dash-shortcut-lbl">Lançar</div>
-            </div>
-            <div class="dash-shortcut" onclick="showPanel('diario')">
-              <div class="dash-shortcut-icon">📊</div>
-              <div class="dash-shortcut-lbl">Consumo</div>
-            </div>
-            <div class="dash-shortcut" onclick="showPanel('historico')">
-              <div class="dash-shortcut-icon">📈</div>
-              <div class="dash-shortcut-lbl">Histórico</div>
-            </div>
-            <div class="dash-shortcut" onclick="copiarResumo()" title="Copiar resumo (Ctrl+C)">
-              <div class="dash-shortcut-icon">📋</div>
-              <div class="dash-shortcut-lbl">Copiar</div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -3071,6 +3268,7 @@ function _roundRect(ctx,x,y,w,h,r){
 
 // ── DASH TANK ANIMADO (mesmo estilo do infográfico) ────────
 let _dashTankAnim={raf:null,t:0,fillCur:0,fillTarget:0,bubbles:[]};
+let _dashTank={raf:null,t:0,lastTime:null,fillCur:0,fillTarget:0,bubbles:[]};
 function _dashTankStop(){if(_dashTankAnim.raf){cancelAnimationFrame(_dashTankAnim.raf);_dashTankAnim.raf=null;}}
 function _dashTankInitBubbles(){
   _dashTankAnim.bubbles=Array.from({length:8},()=>({
@@ -4938,7 +5136,6 @@ function showPanel(p){
   if(main)main.scrollTo({top:0,behavior:'smooth'});
   if(p==='cfg')loadCfg();
   // Ao entrar no dash, resetar fillCur para animar do estado atual
-  if(p==='dash')_dashTankAnim.fillCur=0;
   render();
 }
 
@@ -5751,266 +5948,229 @@ function renderDash(){
   const tarifaEsgoto=S.config.tarifaEsgoto||0;
   const trcf=(S.config.trcf||0)/100;
   const economias=S.config.economias||80;
-
-  // Nome
-  const dn=document.getElementById('dash-cond-name');
-  if(dn)dn.textContent=S.config.nome||'HidroSmart';
-
-  // Ciclo sub
-  const ds=document.getElementById('dash-ciclo-sub');
-  if(ds&&c)ds.textContent=(fmtShort(c.inicio)||'?')+' → '+(c.termino?fmtShort(c.termino):'em aberto');
-
   const acc=prev?prev.acc:0;
   const med=prev?prev.med:0;
+  const proj=prev&&prev.projecao?Math.round(prev.projecao):0;
+  const pctMeta=meta>0?(acc/meta*100):50;
 
-  // Hero
-  const da=document.getElementById('dash-acc');
-  if(da)da.textContent=Math.round(acc);
-
-  // Status badge
-  const db=document.getElementById('dash-status-badge');
-  if(db){
-    const pct=meta>0?(acc/meta*100):0;
-    if(pct>=100){db.textContent='🚨 Limite excedido';db.style.background='rgba(192,57,43,.35)';}
-    else if(pct>=90){db.textContent='⚠️ Crítico';db.style.background='rgba(201,112,0,.35)';}
-    else if(pct>=75){db.textContent='⚡ Atenção';db.style.background='rgba(201,112,0,.25)';}
-    else{db.textContent='✓ Normal';db.style.background='rgba(255,255,255,.2)';}
-  }
-
-  // Vencimento
-  const dv=document.getElementById('dash-venc');
-  if(dv&&c&&c.termino){
-    const tm=new Date(c.termino+'T12:00:00');
-    const m=tm.getMonth()===11?0:tm.getMonth()+1;
-    const y=tm.getMonth()===11?tm.getFullYear()+1:tm.getFullYear();
-    dv.textContent='Venc. 20/'+String(m+1).padStart(2,'0')+'/'+y;
-  } else if(dv) dv.textContent='';
-
-  // Progress bar
-  const pct=meta>0?Math.min(100,acc/meta*100):0;
-  const pf=document.getElementById('dash-prog-fill');
-  if(pf)pf.style.width=pct.toFixed(1)+'%';
-  const pm=document.getElementById('dash-prog-mid');
-  if(pm&&meta>0)pm.textContent=Math.round(pct)+'%';
-  const pmx=document.getElementById('dash-prog-max');
-  if(pmx)pmx.textContent=meta>0?meta+' m³':'—';
-
-  // KPIs com status visual
-  function _setKpiSt(id,st){const el=document.getElementById(id);if(el){el.className='dash-kpi st-'+st;}}
-
-  // Média/dia — compara com meta/30 dias estimados
-  const dm=document.getElementById('dash-med');
-  if(dm){
-    dm.textContent=med>0?med.toFixed(1):'—';
-    if(med>0&&meta>0){
-      const medRef=meta/30;
-      const st=med>medRef*1.1?'danger':med>medRef*0.9?'warn':'ok';
-      _setKpiSt('dash-kpi-med',st);
-      const sub=document.getElementById('dash-med-sub');
-      if(sub)sub.textContent=st==='danger'?'acima da média':st==='warn'?'próximo do limite':'dentro do esperado';
-    } else _setKpiSt('dash-kpi-med','ok');
-  }
-
-  // Dias restantes
-  const dr=document.getElementById('dash-dias-rest');
-  const drs=document.getElementById('dash-dias-rest-sub');
-  if(dr){
-    if(prev&&prev.diasRestantes!==null){
-      const d=prev.diasRestantes;
-      dr.textContent=d;
-      const st=d<=3?'danger':d<=7?'warn':'ok';
-      _setKpiSt('dash-kpi-dias',st);
-      if(drs){drs.textContent=d<=3?'urgente — poucos dias':d<=7?'atenção — menos de 1 sem.':'dias restantes';drs.style.color='';}
-    }else{
-      dr.textContent='—';
-      if(drs){drs.textContent='sem previsão';drs.style.color='';}
-    }
-  }
-
-  // Projeção vs meta
-  const dpj=document.getElementById('dash-proj');
-  if(dpj){
-    const proj=prev&&prev.projecao?Math.round(prev.projecao):null;
-    dpj.textContent=proj||'—';
-    dpj.style.color='';
-    if(proj&&meta>0){
-      const st=proj>meta*1.05?'danger':proj>meta*0.9?'warn':'ok';
-      _setKpiSt('dash-kpi-proj',st);
-      const sub=document.getElementById('dash-proj-sub');
-      if(sub)sub.textContent=st==='danger'?'excede o limite':st==='warn'?'próximo do limite':'abaixo do limite';
-    } else _setKpiSt('dash-kpi-proj','ok');
-  }
-
-  // Custo estimado total (água + esgoto + TRCF)
-  const custoAgua=acc*tarifa;
-  const custoEsgoto=acc*tarifaEsgoto;
-  const subtotal=custoAgua+custoEsgoto;
-  const custoTotal=subtotal*(1+trcf);
-  const dc=document.getElementById('dash-custo');
-  if(dc){
-    dc.textContent=tarifa>0?'R$'+Math.round(custoTotal).toLocaleString('pt-BR'):'—';
-    if(tarifa>0&&meta>0){
-      const custoRef=meta*tarifa*(1+trcf);
-      const stC=custoTotal>custoRef*1.05?'danger':custoTotal>custoRef*0.9?'warn':'ok';
-      _setKpiSt('dash-kpi-custo',stC);
-      const subC=document.getElementById('dash-custo-sub');
-      if(subC)subC.textContent=stC==='danger'?'acima do previsto':stC==='warn'?'próximo do limite':'dentro do previsto';
-    }
-  }
-
-  // Financeiro detalhado
-  const dfr=document.getElementById('dash-fin-rows');
-  if(dfr){
-    let rows='';
-    if(tarifa>0){
-      rows+=`<div class="dash-fin-row"><span class="dash-fin-lbl">Água (${acc.toFixed(0)} m³ × R$${tarifa.toFixed(3)})</span><span class="dash-fin-val">R$ ${custoAgua.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`;
-    }
-    if(tarifaEsgoto>0){
-      rows+=`<div class="dash-fin-row"><span class="dash-fin-lbl">Esgoto (R$${tarifaEsgoto.toFixed(3)}/m³)</span><span class="dash-fin-val">R$ ${custoEsgoto.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`;
-    }
-    if(trcf>0){
-      const vTrcf=subtotal*trcf;
-      rows+=`<div class="dash-fin-row"><span class="dash-fin-lbl">TRCF (${(trcf*100).toFixed(2)}%)</span><span class="dash-fin-val">R$ ${vTrcf.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`;
-    }
-    if(tarifa>0){
-      rows+=`<div class="dash-fin-row"><span class="dash-fin-lbl" style="font-weight:700">Total estimado</span><span class="dash-fin-total" style="color:var(--blue)">R$ ${custoTotal.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`;
-    }
-    if(!rows)rows='<div style="font-size:12px;color:var(--text3);padding:8px 0">Configure a tarifa em Configurações para ver o custo estimado.</div>';
-    dfr.innerHTML=rows;
-  }
-
-  // Custo por unidade
-  const dcu=document.getElementById('dash-custo-unit');
-  const dus=document.getElementById('dash-unit-sub');
-  if(dcu){
-    if(tarifa>0&&economias>0){
-      dcu.textContent='R$ '+Math.round(custoTotal/economias).toLocaleString('pt-BR');
-      if(dus)dus.textContent='por economia ('+economias+' unidades)';
-    } else {
-      dcu.textContent='—';
-      if(dus)dus.textContent='configure tarifa e unidades';
-    }
-  }
-
-  // Pill de status na topbar
+  // ── TOPBAR STATUS PILL ──
   const tPill=document.getElementById('t-status-pill');
   const tTxt=document.getElementById('t-status-txt');
   if(tPill&&meta>0&&prev){
-    const p=Math.round(acc/meta*100);
-    const st=p>=100?'danger':p>=75?'warn':'ok';
-    tPill.className='t-status-pill '+st;
+    const p=Math.round(pctMeta);
+    tPill.className='t-status-pill '+(p>=100?'danger':p>=75?'warn':'ok');
     tPill.style.display='inline-flex';
     if(tTxt)tTxt.textContent=Math.round(acc)+' m³ · '+p+'% do limite';
   } else if(tPill){tPill.style.display='none';}
-  // Instalação no footer
+
+  // ── NAV FOOTER ──
   const navInstName=document.getElementById('nav-inst-name');
   const navInstAvatar=document.getElementById('nav-inst-avatar');
   if(navInstName){const nm=S.config.nome||'Instalação';navInstName.textContent=nm;if(navInstAvatar)navInstAvatar.textContent=nm.charAt(0).toUpperCase()+(nm.split(' ')[1]?nm.split(' ')[1].charAt(0).toUpperCase():'');}
 
-  // Tanque dashboard animado
-  const dtp=document.getElementById('dash-tank-pct');
-  if(dtp)dtp.textContent=Math.round(acc)+' m³';
-  const dtd=document.getElementById('dash-tank-desc');
-  if(dtd)dtd.textContent='de '+(meta||'—')+' m³';
+  // ── SCORE 0-100 ──
+  let score=100;
+  if(pctMeta>=100)score-=40;else if(pctMeta>=90)score-=25;else if(pctMeta>=75)score-=12;else if(pctMeta>=60)score-=5;
+  const gap=_diasSemLeitura();
+  if(gap!==null){if(gap>=7)score-=20;else if(gap>=3)score-=10;else if(gap>=2)score-=4;}
+  const medHist=_calcMediaHistorica();
+  const varPct=medHist>0?((med-medHist)/medHist*100):0;
+  if(varPct>30)score-=15;else if(varPct>15)score-=7;else if(varPct>5)score-=3;
+  score=Math.max(5,Math.min(100,Math.round(score)));
+  const scoreSt=score>=80?'ok':score>=55?'warn':'crit';
+  const scoreLbl=score>=80?'Consumo saudável · tudo sob controle':score>=55?'Atenção · alguns pontos requerem cuidado':'Alerta · consumo preocupante';
 
-  // Badge de percentual + barra de progresso + status do card
-  const pctVal=meta>0?Math.min(100,(acc/meta)*100):0;
-  const tankSt=pctVal>=100?'danger':pctVal>=90?'danger':pctVal>=75?'warn':'ok';
-  const tankCard=document.getElementById('dash-tank-card');
-  if(tankCard){tankCard.className='dash-tank-card st-'+tankSt;}
-  const badge=document.getElementById('dash-tank-pct-badge');
-  if(badge){badge.textContent=Math.round(pctVal)+'%';badge.className='dash-tank-pct-badge st-'+tankSt;}
-  const progFill=document.getElementById('dash-tank-prog-fill');
-  if(progFill){
-    progFill.style.width=Math.min(100,pctVal).toFixed(1)+'%';
-    progFill.style.background=pctVal>=90?'var(--red)':pctVal>=75?'var(--amber)':'var(--green)';
+  const el_score=document.getElementById('hs-score-num');
+  if(el_score)el_score.innerHTML=score+'<span>/100</span>';
+  const el_lbl=document.getElementById('hs-score-lbl');
+  if(el_lbl)el_lbl.textContent=scoreLbl;
+  const el_acc=document.getElementById('hs-acc');
+  if(el_acc)el_acc.textContent=Math.round(acc)||'—';
+  const el_ciclo=document.getElementById('hs-ciclo-lbl');
+  if(el_ciclo&&c)el_ciclo.textContent=(fmtShort(c.inicio)||'?')+' → '+(c.termino?fmtShort(c.termino):'em aberto');
+
+  // Progress bar hero
+  const el_pw=document.getElementById('hs-prog-wrap');
+  if(el_pw)el_pw.style.display=meta>0?'block':'none';
+  if(meta>0){
+    const pf=Math.min(100,pctMeta);
+    const fill=document.getElementById('hs-prog-fill');
+    if(fill){fill.style.width=pf.toFixed(1)+'%';fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'');}
+    const pp=document.getElementById('hs-prog-pct');if(pp)pp.textContent=Math.round(pf)+'%';
+    const pmx=document.getElementById('hs-prog-max');if(pmx)pmx.textContent='limite: '+meta+' m³';
   }
-  const progMid=document.getElementById('dash-tank-prog-mid');
-  if(progMid)progMid.textContent=meta>0?Math.round(pctVal)+'%':'';
-  const progMax=document.getElementById('dash-tank-prog-max');
-  if(progMax)progMax.textContent=meta>0?meta+' m³':'—';
-  if(dtp)dtp.style.color=pctVal>=90?'var(--red)':pctVal>=75?'var(--amber)':'var(--text)';
-  renderDashTank(acc,meta);
 
-  // Histórico mini bars
-  const dhb=document.getElementById('dash-hist-bars');
+  // Badges hero
+  const el_badges=document.getElementById('hs-hero-badges');
+  if(el_badges){
+    const bs=[];
+    if(pctMeta<75)bs.push('<span class="hs-badge ok">✓ Consumo normal</span>');
+    else if(pctMeta<90)bs.push('<span class="hs-badge warn">⚡ Consumo elevado</span>');
+    else bs.push('<span class="hs-badge crit">🚨 Limite crítico</span>');
+    if(gap!==null&&gap>=3)bs.push('<span class="hs-badge warn">⚠ '+gap+'d sem leitura</span>');
+    else if(gap!==null&&gap<2)bs.push('<span class="hs-badge ok">✓ Leitura em dia</span>');
+    if(proj>0&&meta>0)bs.push(proj>meta?'<span class="hs-badge crit">📈 Excede limite</span>':'<span class="hs-badge ok">✓ Dentro do limite</span>');
+    el_badges.innerHTML=bs.join('');
+  }
+
+  // ── ALERTAS INTELIGENTES ──
+  const el_alerts=document.getElementById('hs-alerts');
+  if(el_alerts){
+    const alerts=[];
+    if(proj>0&&meta>0&&proj>meta){
+      alerts.push({t:'crit',i:'🚨',ti:'Projeção ultrapassa o limite em '+Math.round((proj/meta-1)*100)+'%',s:'Projeção: '+proj+' m³ · Limite: '+meta+' m³',c:'Crítico'});
+    }
+    if(medHist>0&&Math.abs(varPct)>10){
+      const dir=varPct>0?'acima':'abaixo';
+      alerts.push({t:varPct>20?'warn':'info',i:varPct>20?'⚠️':'📊',ti:'Consumo '+Math.abs(Math.round(varPct))+'% '+dir+' da média histórica',s:'Média atual: '+med.toFixed(1)+' m³/dia · Histórica: '+medHist.toFixed(1)+' m³/dia',c:varPct>20?'Atenção':'Info'});
+    }
+    if(gap!==null&&gap>=3){
+      alerts.push({t:gap>=7?'crit':'warn',i:'📅',ti:gap+' dias sem leitura registrada',s:'Registre para manter controle preciso do consumo',c:gap>=7?'Urgente':'Lembrete'});
+    }
+    if(proj>0&&meta>0&&proj>meta*0.88&&proj<=meta){
+      alerts.push({t:'warn',i:'⚡',ti:'Projeção próxima do limite · faltam ~'+Math.round(meta-proj)+' m³',s:'Se continuar assim o ciclo fecha com '+proj+' m³',c:'Atenção'});
+    }
+    if(!alerts.length&&acc>0){
+      alerts.push({t:'ok',i:'✅',ti:'Sistema saudável · consumo dentro do esperado',s:'Consumo: '+Math.round(acc)+' m³'+(meta>0?' · '+Math.round(pctMeta)+'% do limite':''),c:'OK'});
+    }
+    el_alerts.innerHTML=alerts.map(a=>`<div class="hs-alert ${a.t}"><div class="hs-alert-icon">${a.i}</div><div class="hs-alert-body"><div class="hs-alert-title">${a.ti}</div><div class="hs-alert-sub">${a.s}</div></div><span class="hs-alert-chip">${a.c}</span></div>`).join('');
+  }
+
+  // ── KPI CARDS ──
+  function _setHsKpi(id,valHtml,trendHtml,trendCls,stCls){
+    const k=document.getElementById(id);if(!k)return;
+    k.className='hs-kpi '+stCls;
+    const ve=k.querySelector('.hs-kpi-val');if(ve)ve.innerHTML=valHtml;
+    const te=k.querySelector('.hs-kpi-trend');if(te){te.innerHTML=trendHtml;te.className='hs-kpi-trend '+trendCls;}
+  }
+  const stAcc=pctMeta>=90?'kpi-crit':pctMeta>=75?'kpi-warn':'kpi-ok';
+  _setHsKpi('hs-kpi-acc',Math.round(acc)+'<small> m³</small>',
+    medHist>0?(varPct>0?'↑ +'+Math.round(varPct)+'% vs. histórico':'↓ '+Math.round(varPct)+'% vs. histórico'):(meta>0?Math.round(pctMeta)+'% do limite':'sem limite'),
+    varPct>10?'up':varPct<-5?'dn':'eq',stAcc);
+  const medRef=meta>0?meta/30:0;
+  const stMed=medRef>0&&med>medRef*1.15?'kpi-crit':medRef>0&&med>medRef*0.95?'kpi-warn':'kpi-ok';
+  _setHsKpi('hs-kpi-med',med>0?med.toFixed(1)+'<small> m³/dia</small>':'—',
+    medRef>0?'ref. '+medRef.toFixed(1)+' m³/dia':'configure limite','eq',stMed);
+  const stProj=proj>0&&meta>0&&proj>meta?'kpi-crit':proj>0&&meta>0&&proj>meta*0.88?'kpi-warn':proj>0?'kpi-ok':'kpi-neu';
+  _setHsKpi('hs-kpi-proj',proj>0?proj+'<small> m³</small>':'—',
+    proj>0&&meta>0?'limite '+meta+' m³ · '+(proj<=meta?'OK':'excede +'+Math.round(proj-meta)+' m³'):'aguardando dados',
+    proj>0&&meta>0&&proj>meta?'up':'eq',stProj);
+  const custoAgua=acc*tarifa;const custoEsgoto=acc*tarifaEsgoto;const subtotal=custoAgua+custoEsgoto;const custoTotal=subtotal*(1+trcf);
+  const custoRef=meta>0?meta*tarifa*(1+trcf):0;
+  const stCusto=tarifa>0&&custoRef>0&&custoTotal>custoRef*1.05?'kpi-crit':tarifa>0&&custoRef>0&&custoTotal>custoRef*0.88?'kpi-warn':tarifa>0?'kpi-ok':'kpi-neu';
+  _setHsKpi('hs-kpi-custo',tarifa>0?'R$&nbsp;'+Math.round(custoTotal).toLocaleString('pt-BR'):'—',
+    tarifa>0?'água+esgoto+trcf':'configure tarifas','eq',stCusto);
+
+  // ── HISTOGRAMA ──
+  const dhb=document.getElementById('hs-hist-bars');
   if(dhb){
     const ciclos=[...S.ciclos].reverse().slice(0,6).reverse();
     if(ciclos.length){
-      const vals=ciclos.map(ci=>{
-        const a2=getAncoraParaCiclo(S.ciclos.indexOf(ci));
-        const p2=calcPrev(ci,a2);return p2?p2.acc:0;
-      });
-      const BAR_H=82;
-      // Teto = máx entre os valores e a meta (para linha de meta ficar visível)
-      const maxV=Math.max(...vals,meta>0?meta:0,1);
-      // Linha de meta
-      const metaLine=document.getElementById('dash-hist-meta-line');
-      const metaLbl=document.getElementById('dash-hist-meta-lbl');
-      if(metaLine&&meta>0){
-        const metaPct=Math.min(100,meta/maxV*100);
-        metaLine.style.display='flex';
-        metaLine.style.top=(BAR_H-(BAR_H*metaPct/100))+'px';
-        if(metaLbl)metaLbl.textContent='limite '+meta+'m³';
-      } else if(metaLine){metaLine.style.display='none';}
+      const vals=ciclos.map(ci=>{const ai=S.ciclos.indexOf(ci);const a2=getAncoraParaCiclo(ai);const p2=calcPrev(ci,a2);return p2?p2.acc:0;});
+      const maxV=Math.max(...vals,meta>0?meta:1,1);const BAR_H=62;
       dhb.innerHTML=ciclos.map((ci,i)=>{
-        const v=vals[i];
-        const h=Math.max(4,Math.round(v/maxV*BAR_H));
-        const isCur=i===ciclos.length-1;
-        const lbl=fmtShort(ci.inicio)||'?';
-        const ratio=meta>0?v/meta:0;
-        const barColor=isCur
-          ?'var(--blue)'
-          :(ratio>=1?'var(--red)':ratio>=0.9?'var(--amber)':'var(--blue-m)');
-        const numColor=isCur?'var(--blue)':ratio>=1?'var(--red)':ratio>=0.9?'var(--amber)':'var(--text2)';
-        return`<div class="dash-hist-bar-wrap" title="${Math.round(v)} m³ · ${lbl}">
-          ${isCur?'<div class="dash-hist-cur-tag">atual</div>':''}
-          <div class="dash-hist-num" style="color:${numColor};font-weight:${isCur?'700':'600'}">${Math.round(v)}</div>
-          <div class="dash-hist-bar${isCur?' current':''}" style="height:${h}px;background:${barColor}"></div>
-          <div class="dash-hist-lbl" style="${isCur?'color:var(--blue);font-weight:600':''}"> ${lbl.split('/').slice(0,2).join('/')}</div>
-        </div>`;
+        const v=vals[i];const h=Math.max(4,Math.round(v/maxV*BAR_H));
+        const isCur=i===ciclos.length-1;const over=meta>0&&v>meta;
+        return`<div class="hs-hist-bar${isCur?' cur':over?' over':''}" style="height:${h}px" title="${Math.round(v)} m³"></div>`;
       }).join('');
-    } else {
-      dhb.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0">Nenhum ciclo registrado.</div>';
+      const lbl=document.getElementById('hs-hist-lbl-start');
+      if(lbl&&ciclos[0])lbl.textContent=fmtShort(ciclos[0].inicio)||'—';
     }
   }
 
-  // Card de eficiência (novo)
-  const effCard=document.getElementById('dash-eff-card');
-  if(effCard&&meta>0&&prev&&prev.acc>0){
-    effCard.style.display='block';
-    // Eficiência = quão bem dentro da meta está o consumo projetado
-    const projFinal=prev.projecao||prev.acc;
-    const effPct=Math.max(0,Math.min(200,projFinal/meta*100));
-    const effDisplay=effPct<=100?(100-effPct).toFixed(0)+'% abaixo do limite':(effPct-100).toFixed(0)+'% acima do limite';
-    const effFill=Math.min(100,effPct);
-    const effColor=effPct>=110?'linear-gradient(90deg,var(--amber),var(--red))':effPct>=100?'linear-gradient(90deg,var(--amber),#ffcc44)':'linear-gradient(90deg,var(--green),#26c6aa)';
-    const ep=document.getElementById('dash-eff-pct');
-    const ef=document.getElementById('dash-eff-fill');
-    const el2=document.getElementById('dash-eff-lbl');
-    const et=document.getElementById('dash-eff-tip');
-    if(ep)ep.textContent=Math.round(effPct)+'%';
-    if(ep)ep.style.color=effPct>100?'var(--amber)':'var(--green-d)';
-    if(ef){ef.style.width=effFill+'%';ef.style.background=effColor;}
-    if(el2)el2.textContent=effPct<=100?'do limite utilizado (projeção)':'do limite — atenção!';
-    if(et){
-      const diasAte=prev.diasRestantes;
-      if(diasAte!==null&&diasAte>0&&prev.med>0){
-        const restante=meta-prev.acc;const mediaIdeal=restante/diasAte;
-        et.innerHTML=`💡 Para fechar no limite: média de <strong>${mediaIdeal.toFixed(3)} m³/dia</strong> (atual: ${prev.med.toFixed(3)})`;
-      } else {
-        et.textContent=effDisplay;
-      }
-    }
-  } else if(effCard){
-    effCard.style.display='none';
+  // ── INTELIGÊNCIA ──
+  const il=document.getElementById('hs-intel-list');
+  if(il){
+    const items=[];
+    const dData=c?getDaysData(c,anc):null;
+    let pico=0;
+    if(dData&&dData.consDat)pico=Math.max(...dData.consDat.filter(v=>v!==null&&v>0).concat([0]));
+    if(pico>0)items.push({l:'Pico do ciclo',v:pico.toFixed(1)+' m³/dia',s:pico>med*1.5?'crit':pico>med*1.25?'warn':'ok'});
+    items.push({l:'Projeção fechamento',v:proj>0?proj+' m³':'—',s:proj>0&&meta>0&&proj>meta?'crit':proj>0&&meta>0&&proj>meta*0.88?'warn':'ok'});
+    if(medHist>0)items.push({l:'Média histórica',v:medHist.toFixed(0)+' m³/ciclo',s:'ok'});
+    if(varPct!==0&&medHist>0)items.push({l:'Variação vs. histórico',v:(varPct>0?'+':'')+Math.round(varPct)+'%',s:varPct>20?'crit':varPct>10?'warn':varPct<-5?'ok':'eq'});
+    items.push({l:'Score de saúde',v:score+' / 100',s:scoreSt});
+    il.innerHTML=items.map(it=>`<div class="hs-intel-item"><span class="hs-intel-lbl">${it.l}</span><span class="hs-intel-val ${it.s}">${it.v}</span></div>`).join('');
   }
+
+  // ── FINANCEIRO DETALHE ──
+  const fd=document.getElementById('hs-fin-detail');
+  if(fd){
+    if(tarifa>0){
+      fd.innerHTML=`<div style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Água</span><span style="font-weight:600">R$ ${custoAgua.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>
+        ${tarifaEsgoto>0?`<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">Esgoto</span><span style="font-weight:600">R$ ${custoEsgoto.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`:''}
+        ${trcf>0?`<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--text2)">TRCF</span><span style="font-weight:600">R$ ${(subtotal*trcf).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>`:''}
+        <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:800;padding-top:6px;border-top:1px solid var(--border);margin-top:2px"><span>Total</span><span style="color:var(--blue)">R$ ${custoTotal.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span></div>
+      </div>`;
+      const cuw=document.getElementById('hs-custo-unit-wrap');if(cuw)cuw.style.display='block';
+      const cu=document.getElementById('hs-custo-unit');if(cu&&economias>0)cu.textContent='R$ '+Math.round(custoTotal/economias).toLocaleString('pt-BR');
+      const cus=document.getElementById('hs-custo-unit-sub');if(cus)cus.textContent='por economia ('+economias+' unidades)';
+    } else {
+      fd.innerHTML='<span style="font-size:11px;color:var(--text3)">Configure tarifas em Configurações</span>';
+    }
+  }
+
+  // ── CHARTS ──
+  _renderHsDailyChart(c,anc,med,meta);
+  _renderHsMonthlyChart();
 }
 
-// ══════════════════════════════════════════════════
-// DASHBOARD TANK — canvas animado com ondas
-// ══════════════════════════════════════════════════
-const _dashTank={raf:null,t:0,fillCur:0,fillTarget:0,bubbles:[],lastTime:null};
+function _calcMediaHistorica(){
+  if(!S.ciclos||S.ciclos.length<2)return 0;
+  const accs=S.ciclos.slice(0,-1).map(ci=>{const ai=S.ciclos.indexOf(ci);const a=getAncoraParaCiclo(ai);const p=calcPrev(ci,a);return p?p.acc:0;}).filter(v=>v>0);
+  if(!accs.length)return 0;
+  return accs.reduce((a,b)=>a+b,0)/accs.length;
+}
+
+let _hsDailyChart=null;
+function _renderHsDailyChart(c,anc,med,meta){
+  const canvas=document.getElementById('hs-daily-chart');
+  if(!canvas||typeof Chart==='undefined')return;
+  if(_hsDailyChart){try{_hsDailyChart.destroy();}catch(e){}}_hsDailyChart=null;
+  if(!c||!c.lancamentos.length)return;
+  const dData=getDaysData(c,anc);
+  if(!dData||!dData.labels.length)return;
+  const real=dData.consDat;
+  const lastRI=real.reduce((li,v,i)=>v!==null&&v>0?i:li,-1);
+  const proj=real.map((v,i)=>{
+    if(i<lastRI)return null;
+    if(i===lastRI)return v;
+    return med>0?parseFloat(med.toFixed(2)):null;
+  });
+  const avg=dData.labels.map(()=>med>0?parseFloat(med.toFixed(2)):null);
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';
+  const tc=isDark?'rgba(255,255,255,.4)':'#8faab8';
+  _hsDailyChart=new Chart(canvas,{type:'line',data:{labels:dData.labels,datasets:[
+    {label:'Real',data:real,borderColor:'#0062cc',backgroundColor:'rgba(0,98,204,.09)',fill:true,tension:.35,pointRadius:1.5,pointHoverRadius:5,borderWidth:2.5,spanGaps:false},
+    {label:'Projeção',data:proj,borderColor:'#f59e0b',borderDash:[5,4],tension:.3,pointRadius:0,borderWidth:2,spanGaps:false},
+    {label:'Média',data:avg,borderColor:'rgba(34,197,94,.55)',borderDash:[3,3],tension:0,pointRadius:0,borderWidth:1.5},
+  ]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:isDark?'rgba(13,24,41,.95)':'rgba(13,24,41,.9)',cornerRadius:8,padding:10,callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.parsed.y!==null?ctx.parsed.y.toFixed(1)+' m³':'—')}}},scales:{x:{grid:{color:gc},ticks:{font:{size:9},color:tc,maxTicksLimit:8,autoSkip:true}},y:{grid:{color:gc},ticks:{font:{size:9},color:tc,callback:v=>v+'m³'},min:0}}}});
+}
+
+let _hsMonthlyChart=null;
+function _renderHsMonthlyChart(){
+  const canvas=document.getElementById('hs-monthly-chart');
+  if(!canvas||typeof Chart==='undefined')return;
+  if(_hsMonthlyChart){try{_hsMonthlyChart.destroy();}catch(e){}}_hsMonthlyChart=null;
+  const ciclos=[...S.ciclos].reverse().slice(0,7).reverse();
+  if(!ciclos.length)return;
+  const labels=ciclos.map(ci=>fmtShort(ci.inicio)||'?');
+  const vals=ciclos.map(ci=>{const ai=S.ciclos.indexOf(ci);const a=getAncoraParaCiclo(ai);const p=calcPrev(ci,a);return p?Math.round(p.acc):0;});
+  const meta=S.config.meta||0;
+  const prevVals=vals.slice(0,-1).filter(v=>v>0);
+  const avgVal=prevVals.length>0?Math.round(prevVals.reduce((a,b)=>a+b,0)/prevVals.length):0;
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.05)';
+  const tc=isDark?'rgba(255,255,255,.4)':'#8faab8';
+  const colors=vals.map((v,i)=>i===vals.length-1?'#0062cc':meta>0&&v>meta?'rgba(239,68,68,.6)':meta>0&&v>meta*0.88?'rgba(245,158,11,.55)':isDark?'rgba(100,160,230,.5)':'rgba(180,210,245,.85)');
+  const datasets=[{label:'Consumo',data:vals,backgroundColor:colors,borderRadius:5,borderSkipped:false}];
+  if(avgVal>0)datasets.push({label:'Média',data:labels.map(()=>avgVal),type:'line',borderColor:'rgba(34,197,94,.6)',borderDash:[4,3],pointRadius:0,borderWidth:1.8});
+  if(meta>0)datasets.push({label:'Limite',data:labels.map(()=>meta),type:'line',borderColor:'rgba(239,68,68,.45)',borderDash:[2,4],pointRadius:0,borderWidth:1.5});
+  _hsMonthlyChart=new Chart(canvas,{type:'bar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:isDark?'rgba(13,24,41,.95)':'rgba(13,24,41,.9)',cornerRadius:8,padding:10,callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.parsed.y+' m³'}}},scales:{x:{grid:{display:false},ticks:{font:{size:9},color:tc}},y:{grid:{color:gc},ticks:{font:{size:9},color:tc,callback:v=>v+''},min:0,suggestedMax:meta>0?meta*1.2:undefined}}}});
+}
+
 
 function _dashTankWaterColor(f){
   if(f>=0.95)return['#c62828','#e53935'];
@@ -6491,9 +6651,7 @@ setTimeout(()=>{
     const prev=c?calcPrev(c,anc):null;
     const acc=prev?prev.acc:0;
     const meta=S.config.meta||0;
-    // Forçar reset do fillCur para re-animar corretamente
-    _dashTankAnim.fillCur=0;
-    renderDashTank(acc,meta);
+    // Tank canvas removido do novo dashboard
   }
 },1400);
 setTimeout(()=>{showOnboarding();showWelcome();},600);
@@ -6506,6 +6664,234 @@ if(_syncMeta.binId&&_syncMeta.apiKey) updateSyncUI('connected');
 
 
 </script>
+      <!-- ── SENSORES IoT ── -->
+      <div id="panel-iot" class="panel">
+
+        <!-- Banner modo simulação -->
+        <div class="iot-sim-banner" id="iot-sim-banner">
+          <span style="font-size:16px">🔬</span>
+          <span><strong>Modo demonstração</strong> — dados simulados. Configure o endpoint da API para conectar sensores reais.</span>
+        </div>
+
+        <!-- Hero status geral -->
+        <div class="iot-hero" id="iot-hero">
+          <div class="iot-hero-inner">
+            <div>
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.65;margin-bottom:4px">Status do sistema IoT</div>
+              <div class="iot-hero-score" id="iot-score">—<span>/100</span></div>
+              <div class="iot-hero-lbl" id="iot-score-lbl">aguardando dados</div>
+              <div class="iot-hero-badges" id="iot-hero-badges"></div>
+            </div>
+            <div class="iot-hero-stats">
+              <div class="iot-hero-stat">
+                <div class="iot-hero-stat-val" id="iot-stat-online">—</div>
+                <div class="iot-hero-stat-lbl">sensores online</div>
+              </div>
+              <div class="iot-hero-stat">
+                <div class="iot-hero-stat-val" id="iot-stat-ok">—</div>
+                <div class="iot-hero-stat-lbl">caixas OK</div>
+              </div>
+              <div class="iot-hero-stat">
+                <div class="iot-hero-stat-val" id="iot-stat-pumps">—</div>
+                <div class="iot-hero-stat-lbl">bombas ativas</div>
+              </div>
+              <div class="iot-hero-stat">
+                <div class="iot-hero-stat-val" id="iot-stat-alerts">—</div>
+                <div class="iot-hero-stat-lbl">alertas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertas IoT -->
+        <div class="iot-alert-strip" id="iot-alerts"></div>
+
+        <!-- Caixas Principais -->
+        <div class="iot-section-title">🟦 Reservatórios principais</div>
+        <div class="iot-main-grid">
+          <div class="iot-card" id="iot-card-main-a">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Caixa Principal A</div>
+                <div class="iot-card-sub">Abastece Blocos 1 e 2</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-main-a"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-main-a">—</span><small> %</small></div>
+            <div class="iot-level-sub"><span id="iot-dist-main-a">—</span> cm · <span id="iot-vol-main-a">—</span></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-main-a" style="width:0%"></div></div>
+              <div class="iot-bar-labels"><span>0%</span><span id="iot-bar-lbl-main-a">vazio</span><span>100%</span></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-main-a" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba A</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-main-a">—</span>
+            </div>
+          </div>
+          <div class="iot-card" id="iot-card-main-b">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Caixa Principal B</div>
+                <div class="iot-card-sub">Abastece Blocos 3 e 4</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-main-b"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-main-b">—</span><small> %</small></div>
+            <div class="iot-level-sub"><span id="iot-dist-main-b">—</span> cm · <span id="iot-vol-main-b">—</span></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-main-b" style="width:0%"></div></div>
+              <div class="iot-bar-labels"><span>0%</span><span id="iot-bar-lbl-main-b">vazio</span><span>100%</span></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-main-b" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba B</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-main-b">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caixas Superiores -->
+        <div class="iot-section-title">🏢 Caixas superiores (por bloco)</div>
+        <div class="iot-grid">
+          <div class="iot-card" id="iot-card-bloco1">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Bloco 1</div>
+                <div class="iot-card-sub">Caixa superior</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-bloco1"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-bloco1">—</span><small> %</small></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-bloco1" style="width:0%"></div></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-bloco1" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-bloco1">—</span>
+            </div>
+          </div>
+          <div class="iot-card" id="iot-card-bloco2">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Bloco 2</div>
+                <div class="iot-card-sub">Caixa superior</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-bloco2"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-bloco2">—</span><small> %</small></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-bloco2" style="width:0%"></div></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-bloco2" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-bloco2">—</span>
+            </div>
+          </div>
+          <div class="iot-card" id="iot-card-bloco3">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Bloco 3</div>
+                <div class="iot-card-sub">Caixa superior</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-bloco3"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-bloco3">—</span><small> %</small></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-bloco3" style="width:0%"></div></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-bloco3" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-bloco3">—</span>
+            </div>
+          </div>
+          <div class="iot-card" id="iot-card-bloco4">
+            <div class="iot-card-header">
+              <div>
+                <div class="iot-card-title">Bloco 4</div>
+                <div class="iot-card-sub">Caixa superior</div>
+              </div>
+              <div class="iot-status-dot" id="iot-dot-bloco4"></div>
+            </div>
+            <div class="iot-level-num"><span id="iot-lvl-bloco4">—</span><small> %</small></div>
+            <div class="iot-bar-wrap">
+              <div class="iot-bar-track"><div class="iot-bar-fill" id="iot-bar-bloco4" style="width:0%"></div></div>
+            </div>
+            <div class="iot-meta-row">
+              <span id="iot-pump-bloco4" class="iot-pump-badge off"><span class="iot-pump-dot"></span>Bomba</span>
+              <span style="font-size:10px;color:var(--text3)" id="iot-ts-bloco4">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico histórico nível -->
+        <div class="iot-section-title">📈 Histórico de nível (últimas 24h)</div>
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <div>
+              <div style="font-family:var(--display);font-size:13px;font-weight:700;color:var(--text)">Nível por caixa</div>
+              <div style="font-size:11px;color:var(--text3)">% de capacidade ao longo do tempo</div>
+            </div>
+            <div style="display:flex;gap:8px;font-size:10px;color:var(--text2);flex-wrap:wrap">
+              <span style="display:flex;align-items:center;gap:3px"><span style="width:10px;height:3px;background:#0062cc;border-radius:2px;display:inline-block"></span>Caixa A</span>
+              <span style="display:flex;align-items:center;gap:3px"><span style="width:10px;height:3px;background:#7c3aed;border-radius:2px;display:inline-block"></span>Caixa B</span>
+              <span style="display:flex;align-items:center;gap:3px"><span style="width:10px;height:3px;background:#0891b2;border-radius:2px;display:inline-block"></span>Blocos</span>
+            </div>
+          </div>
+          <div style="position:relative;height:180px"><canvas id="iot-history-chart"></canvas></div>
+        </div>
+
+        <!-- Configuração API -->
+        <div class="iot-cfg-card">
+          <div class="iot-cfg-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            Configuração da API de sensores
+          </div>
+          <div class="iot-cfg-grid">
+            <div class="fg">
+              <label>Endpoint da API (ESP32 → app)</label>
+              <input type="text" id="iot-api-url" placeholder="http://192.168.1.100/api/sensores" style="font-size:13px">
+            </div>
+            <div class="fg">
+              <label>Intervalo de atualização (seg)</label>
+              <input type="number" id="iot-interval" value="30" min="5" max="300" style="font-size:13px">
+            </div>
+            <div class="fg">
+              <label>Capacidade caixas principais (litros)</label>
+              <input type="number" id="iot-cap-main" placeholder="10000" min="100" style="font-size:13px">
+            </div>
+            <div class="fg">
+              <label>Capacidade caixas superiores (litros)</label>
+              <input type="number" id="iot-cap-upper" placeholder="3000" min="100" style="font-size:13px">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+            <div class="fg">
+              <label>Alerta caixa principal abaixo de (%)</label>
+              <input type="number" id="iot-thresh-main" value="20" min="5" max="50" style="font-size:13px">
+            </div>
+            <div class="fg">
+              <label>Ligar bomba quando caixa superior < (%)</label>
+              <input type="number" id="iot-thresh-upper" value="30" min="10" max="60" style="font-size:13px">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button class="iot-connect-btn" onclick="iotSaveConfig()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Salvar configuração
+            </button>
+            <button class="iot-connect-btn simulated" onclick="iotToggleSim()" id="iot-sim-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span id="iot-sim-label">Simular sensores</span>
+            </button>
+          </div>
+          <div style="margin-top:10px;padding:10px;background:var(--bg3);border-radius:var(--r);font-size:11px;color:var(--text3)">
+            <strong style="color:var(--text2)">Formato JSON esperado do ESP32:</strong><br>
+            <code style="font-size:10px;font-family:var(--mono)">{&quot;id&quot;:&quot;main_a&quot;,&quot;nivel_pct&quot;:72.5,&quot;distancia_cm&quot;:45,&quot;bomba&quot;:false,&quot;ts&quot;:1700000000}</code>
+          </div>
+        </div>
+
+      </div>
+
+
 <style>
 @keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
@@ -7612,18 +7998,13 @@ function closeInstModal(){
 renderInstBtn();
 try{document.getElementById("confirm-ok-btn").addEventListener("click",doConfirm);document.getElementById("confirm-bg").addEventListener("click",e=>{if(e.target===document.getElementById("confirm-bg"))closeConfirm();});}catch(e){}
 
-// ── INICIA ANIMAÇÃO DO TANQUE DO DASHBOARD ──────────────────────
-// Aguarda o primeiro render() popular o target antes de iniciar
-setTimeout(()=>{
-  if(document.getElementById('dash-tank-canvas'))_dashTankStart();
-},400);
+// Tanque do dashboard removido do painel principal
 
 // Pausa animação quando aba está em background (economiza CPU)
 document.addEventListener('visibilitychange',function(){
   if(document.hidden){
-    if(_dashTank.raf){cancelAnimationFrame(_dashTank.raf);_dashTank.raf=null;_dashTank.lastTime=null;}
+    _dashTankStop();
   } else {
-    if(document.getElementById('dash-tank-canvas'))_dashTankStart();
     if(_dirty)saveData(true);
   }
 });
@@ -7878,6 +8259,7 @@ window.addEventListener('beforeunload',function(e){
     'backup':    'mob-nav-menu',
     'manutencao':'mob-nav-menu',
     'cfg':       'mob-nav-menu',
+    'iot':       'mob-nav-menu',
   };
 
   // Patch showPanel to also update bottom nav
@@ -8134,6 +8516,393 @@ window.addEventListener('beforeunload',function(e){
   document.head.appendChild(rippleStyle);
 
   document.querySelectorAll('.mob-nav-item').forEach(addRipple);
+
+})();
+</script>
+
+
+<script>
+/* ══════════════════════════════════════════════════
+   HIDROSMART IoT — Motor de sensores JSN-SR04T
+   ══════════════════════════════════════════════════ */
+(function(){
+
+// ── Estado IoT ──────────────────────────────────────
+const IOT_KEY = 'hs_iot_cfg';
+let _iotCfg = {
+  apiUrl: '',
+  interval: 30,
+  capMain: 10000,
+  capUpper: 3000,
+  threshMain: 20,
+  threshUpper: 30,
+  simMode: true
+};
+let _iotData = null;
+let _iotTimer = null;
+let _iotHistChart = null;
+let _iotHistory = {
+  labels: [],
+  mainA: [], mainB: [],
+  b1: [], b2: [], b3: [], b4: []
+};
+let _simPhase = 0;
+
+// ── Carregar config salva ────────────────────────────
+try {
+  const saved = localStorage.getItem(IOT_KEY);
+  if (saved) Object.assign(_iotCfg, JSON.parse(saved));
+} catch(e) {}
+
+// ── Salvar config ────────────────────────────────────
+window.iotSaveConfig = function() {
+  _iotCfg.apiUrl     = (document.getElementById('iot-api-url')||{}).value || '';
+  _iotCfg.interval   = parseInt((document.getElementById('iot-interval')||{}).value) || 30;
+  _iotCfg.capMain    = parseInt((document.getElementById('iot-cap-main')||{}).value) || 10000;
+  _iotCfg.capUpper   = parseInt((document.getElementById('iot-cap-upper')||{}).value) || 3000;
+  _iotCfg.threshMain = parseInt((document.getElementById('iot-thresh-main')||{}).value) || 20;
+  _iotCfg.threshUpper= parseInt((document.getElementById('iot-thresh-upper')||{}).value) || 30;
+  try { localStorage.setItem(IOT_KEY, JSON.stringify(_iotCfg)); } catch(e) {}
+  showToast && showToast('✓ Configuração IoT salva');
+  iotRestart();
+};
+
+// ── Toggle simulação ─────────────────────────────────
+window.iotToggleSim = function() {
+  _iotCfg.simMode = !_iotCfg.simMode;
+  try { localStorage.setItem(IOT_KEY, JSON.stringify(_iotCfg)); } catch(e) {}
+  iotRestart();
+};
+
+// ── Gerar dados simulados realistas ──────────────────
+function _simData() {
+  _simPhase += 0.04;
+  const t = _simPhase;
+  const noise = () => (Math.random() - 0.5) * 4;
+
+  // Caixa A: nível médio, oscilando — simulando enchimento/consumo
+  const mainA = Math.max(5, Math.min(98, 65 + Math.sin(t * 0.7) * 22 + noise()));
+  // Caixa B: nível mais baixo, com alerta ocasional
+  const mainB = Math.max(5, Math.min(98, 38 + Math.sin(t * 0.5 + 1) * 18 + noise()));
+  // Blocos — oscilam inversamente à bomba
+  const b1 = Math.max(5, Math.min(98, 55 + Math.sin(t * 1.1 + 0.5) * 25 + noise()));
+  const b2 = Math.max(5, Math.min(98, 72 + Math.sin(t * 0.9 + 1.2) * 18 + noise()));
+  const b3 = Math.max(5, Math.min(98, 28 + Math.sin(t * 1.3 + 0.8) * 15 + noise())); // crítico
+  const b4 = Math.max(5, Math.min(98, 81 + Math.sin(t * 0.6 + 2.0) * 12 + noise()));
+
+  const now = Date.now();
+  const ts = (d) => new Date(now).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+
+  // Lógica de bomba: ligar se bloco < threshUpper e principal > threshMain
+  const pumpRule = (bloco, principal) =>
+    principal > _iotCfg.threshMain && bloco < _iotCfg.threshUpper;
+
+  return {
+    main_a: { id:'main_a', nivel_pct: mainA, distancia_cm: Math.round((1 - mainA/100) * 200), bomba: mainA > 15, online: true, ts: ts() },
+    main_b: { id:'main_b', nivel_pct: mainB, distancia_cm: Math.round((1 - mainB/100) * 200), bomba: mainB > 15, online: true, ts: ts() },
+    bloco1: { id:'bloco1', nivel_pct: b1, distancia_cm: Math.round((1 - b1/100) * 100), bomba: pumpRule(b1, mainA), online: true, ts: ts() },
+    bloco2: { id:'bloco2', nivel_pct: b2, distancia_cm: Math.round((1 - b2/100) * 100), bomba: pumpRule(b2, mainA), online: true, ts: ts() },
+    bloco3: { id:'bloco3', nivel_pct: b3, distancia_cm: Math.round((1 - b3/100) * 100), bomba: pumpRule(b3, mainB), online: true, ts: ts() },
+    bloco4: { id:'bloco4', nivel_pct: b4, distancia_cm: Math.round((1 - b4/100) * 100), bomba: pumpRule(b4, mainB), online: true, ts: ts() },
+  };
+}
+
+// ── Buscar dados da API real ──────────────────────────
+async function _fetchReal() {
+  try {
+    const r = await fetch(_iotCfg.apiUrl, { signal: AbortSignal.timeout(5000) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } catch(e) {
+    console.warn('[IoT] API error:', e.message);
+    return null;
+  }
+}
+
+// ── Calcular estado de uma caixa ─────────────────────
+function _cardState(pct, isMain) {
+  if (isMain) {
+    if (pct < _iotCfg.threshMain) return 'crit';
+    if (pct < _iotCfg.threshMain * 1.5) return 'warn';
+    return 'ok';
+  }
+  if (pct < 15) return 'crit';
+  if (pct < 30) return 'warn';
+  return 'ok';
+}
+
+// ── Atualizar card de uma caixa ──────────────────────
+function _updateCard(sensor, isMain) {
+  const id = sensor.id.replace('_', '-'); // main_a → main-a
+  const pct = Math.round(sensor.nivel_pct);
+  const st = sensor.online ? _cardState(sensor.nivel_pct, isMain) : 'offline';
+
+  const card = document.getElementById('iot-card-' + id);
+  if (card) card.className = 'iot-card ' + st;
+
+  const dot = document.getElementById('iot-dot-' + id);
+  if (dot) dot.className = 'iot-status-dot ' + st;
+
+  const lvl = document.getElementById('iot-lvl-' + id);
+  if (lvl) lvl.textContent = pct;
+
+  const bar = document.getElementById('iot-bar-' + id);
+  if (bar) {
+    bar.style.width = pct + '%';
+    bar.style.background = st === 'crit' ? '#ef4444' : st === 'warn' ? '#f59e0b' : '#22c55e';
+  }
+
+  const barLbl = document.getElementById('iot-bar-lbl-' + id);
+  if (barLbl) barLbl.textContent = st === 'crit' ? '⚠ crítico' : st === 'warn' ? '⚡ atenção' : '✓ normal';
+
+  const distEl = document.getElementById('iot-dist-' + id);
+  if (distEl) distEl.textContent = sensor.distancia_cm + ' cm';
+
+  const volEl = document.getElementById('iot-vol-' + id);
+  if (volEl) {
+    const cap = isMain ? _iotCfg.capMain : _iotCfg.capUpper;
+    const liters = Math.round(pct / 100 * cap);
+    volEl.textContent = liters.toLocaleString('pt-BR') + ' L';
+  }
+
+  // Bomba badge
+  const pumpEl = document.getElementById('iot-pump-' + id);
+  if (pumpEl) {
+    const blocked = isMain && sensor.nivel_pct < _iotCfg.threshMain;
+    const pumpName = isMain ? (id.endsWith('a') ? 'Bomba A' : 'Bomba B') : 'Bomba';
+    if (blocked) {
+      pumpEl.className = 'iot-pump-badge blocked';
+      pumpEl.innerHTML = '<span class="iot-pump-dot"></span>❌ Bloqueada';
+    } else if (sensor.bomba) {
+      pumpEl.className = 'iot-pump-badge on';
+      pumpEl.innerHTML = '<span class="iot-pump-dot"></span>' + pumpName + ': ON';
+    } else {
+      pumpEl.className = 'iot-pump-badge off';
+      pumpEl.innerHTML = '<span class="iot-pump-dot"></span>' + pumpName + ': OFF';
+    }
+  }
+
+  const tsEl = document.getElementById('iot-ts-' + id);
+  if (tsEl) tsEl.textContent = sensor.ts || '—';
+}
+
+// ── Gerar alertas inteligentes ──────────────────────
+function _buildAlerts(data) {
+  const alerts = [];
+  const { main_a, main_b, bloco1, bloco2, bloco3, bloco4 } = data;
+
+  // Caixas principais críticas
+  if (main_a && main_a.nivel_pct < _iotCfg.threshMain)
+    alerts.push({ t:'crit', i:'🚨', ti:'Caixa Principal A abaixo de ' + _iotCfg.threshMain + '% — bomba bloqueada', s: Math.round(main_a.nivel_pct) + '% · Risco de falta de água nos Blocos 1 e 2', c:'Crítico' });
+  if (main_b && main_b.nivel_pct < _iotCfg.threshMain)
+    alerts.push({ t:'crit', i:'🚨', ti:'Caixa Principal B abaixo de ' + _iotCfg.threshMain + '% — bomba bloqueada', s: Math.round(main_b.nivel_pct) + '% · Risco de falta de água nos Blocos 3 e 4', c:'Crítico' });
+
+  // Caixas superiores críticas
+  [bloco1,bloco2,bloco3,bloco4].forEach((b,i) => {
+    if (!b) return;
+    if (b.nivel_pct < 15)
+      alerts.push({ t:'crit', i:'⚠️', ti:'Bloco ' + (i+1) + ' com nível crítico: ' + Math.round(b.nivel_pct) + '%', s: 'Reservatório quase vazio — ligar bomba imediatamente', c:'Urgente' });
+    else if (b.nivel_pct < _iotCfg.threshUpper)
+      alerts.push({ t:'warn', i:'⚡', ti:'Bloco ' + (i+1) + ' abaixo de ' + _iotCfg.threshUpper + '%', s: Math.round(b.nivel_pct) + '% · Bomba deve ser ativada', c:'Atenção' });
+  });
+
+  // Detecção de possível vazamento (queda rápida no histórico)
+  if (_iotHistory.mainA.length >= 3) {
+    const last3 = _iotHistory.mainA.slice(-3);
+    const drop = last3[0] - last3[2];
+    if (drop > 15)
+      alerts.push({ t:'crit', i:'💧', ti:'Possível vazamento — Caixa A caiu ' + Math.round(drop) + '% em curto período', s: 'Verifique tubulação. Queda anormal detectada.', c:'Vazamento?' });
+  }
+  if (_iotHistory.mainB.length >= 3) {
+    const last3 = _iotHistory.mainB.slice(-3);
+    const drop = last3[0] - last3[2];
+    if (drop > 15)
+      alerts.push({ t:'crit', i:'💧', ti:'Possível vazamento — Caixa B caiu ' + Math.round(drop) + '% em curto período', s: 'Verifique tubulação. Queda anormal detectada.', c:'Vazamento?' });
+  }
+
+  // Todas OK
+  if (!alerts.length) {
+    alerts.push({ t:'ok', i:'✅', ti:'Sistema hídrico normal — todas as caixas dentro dos limites', s: 'Nível adequado · Bombas operando corretamente', c:'OK' });
+  }
+
+  const el = document.getElementById('iot-alerts');
+  if (el) {
+    el.innerHTML = alerts.map(a =>
+      `<div class="iot-alert ${a.t}"><div class="iot-alert-icon">${a.i}</div><div class="iot-alert-body"><div class="iot-alert-title">${a.ti}</div><div class="iot-alert-ts">${a.s}</div></div><span class="iot-chip">${a.c}</span></div>`
+    ).join('');
+  }
+  return alerts;
+}
+
+// ── Atualizar hero ───────────────────────────────────
+function _updateHero(data, alerts) {
+  const sensors = Object.values(data);
+  const online = sensors.filter(s => s.online).length;
+  const crits = alerts.filter(a => a.t === 'crit').length;
+  const warns = alerts.filter(a => a.t === 'warn').length;
+  const pumpsOn = sensors.filter(s => s.bomba).length;
+  const okCount = sensors.filter(s => _cardState(s.nivel_pct, s.id.startsWith('main')) === 'ok').length;
+
+  let score = 100;
+  score -= crits * 20;
+  score -= warns * 8;
+  score = Math.max(5, Math.min(100, score));
+  const scoreSt = score >= 80 ? 'ok' : score >= 55 ? 'warn' : 'crit';
+  const scoreLbl = score >= 80 ? 'Sistema hídrico saudável' : score >= 55 ? 'Atenção necessária' : 'Situação crítica';
+
+  const sc = document.getElementById('iot-score');
+  if (sc) sc.innerHTML = score + '<span>/100</span>';
+  const sl = document.getElementById('iot-score-lbl');
+  if (sl) sl.textContent = scoreLbl;
+
+  const badges = [];
+  if (crits === 0 && warns === 0) badges.push('<span class="iot-hero-badge ok">✓ Sem alertas</span>');
+  if (crits > 0) badges.push('<span class="iot-hero-badge crit">🚨 ' + crits + ' crítico' + (crits > 1 ? 's' : '') + '</span>');
+  if (warns > 0) badges.push('<span class="iot-hero-badge warn">⚠ ' + warns + ' atenção</span>');
+  if (pumpsOn > 0) badges.push('<span class="iot-hero-badge warn">⚡ ' + pumpsOn + ' bomba' + (pumpsOn > 1 ? 's' : '') + ' ativa' + (pumpsOn > 1 ? 's' : '') + '</span>');
+  const badgesEl = document.getElementById('iot-hero-badges');
+  if (badgesEl) badgesEl.innerHTML = badges.join('');
+
+  const sv = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  sv('iot-stat-online', online + '/' + sensors.length);
+  sv('iot-stat-ok', okCount);
+  sv('iot-stat-pumps', pumpsOn);
+  sv('iot-stat-alerts', crits + warns);
+}
+
+// ── Atualizar histórico e chart ──────────────────────
+function _updateHistory(data) {
+  const now = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  const maxPts = 24;
+
+  _iotHistory.labels.push(now);
+  _iotHistory.mainA.push(Math.round(data.main_a?.nivel_pct || 0));
+  _iotHistory.mainB.push(Math.round(data.main_b?.nivel_pct || 0));
+  _iotHistory.b1.push(Math.round(data.bloco1?.nivel_pct || 0));
+  _iotHistory.b2.push(Math.round(data.bloco2?.nivel_pct || 0));
+  _iotHistory.b3.push(Math.round(data.bloco3?.nivel_pct || 0));
+  _iotHistory.b4.push(Math.round(data.bloco4?.nivel_pct || 0));
+
+  // Manter apenas últimos maxPts pontos
+  Object.keys(_iotHistory).forEach(k => {
+    if (_iotHistory[k].length > maxPts) _iotHistory[k] = _iotHistory[k].slice(-maxPts);
+  });
+
+  _renderIotChart();
+}
+
+function _renderIotChart() {
+  const canvas = document.getElementById('iot-history-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const gc = isDark ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.04)';
+  const tc = isDark ? 'rgba(255,255,255,.35)' : '#8faab8';
+
+  if (_iotHistChart) { try { _iotHistChart.destroy(); } catch(e) {} _iotHistChart = null; }
+
+  _iotHistChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: _iotHistory.labels,
+      datasets: [
+        { label: 'Caixa A', data: _iotHistory.mainA, borderColor: '#0062cc', tension: .35, pointRadius: 0, borderWidth: 2.5, fill: false },
+        { label: 'Caixa B', data: _iotHistory.mainB, borderColor: '#7c3aed', tension: .35, pointRadius: 0, borderWidth: 2.5, fill: false },
+        { label: 'Bloco 1', data: _iotHistory.b1, borderColor: '#0891b2', tension: .35, pointRadius: 0, borderWidth: 1.5, borderDash: [3,2], fill: false },
+        { label: 'Bloco 2', data: _iotHistory.b2, borderColor: '#06b6d4', tension: .35, pointRadius: 0, borderWidth: 1.5, borderDash: [3,2], fill: false },
+        { label: 'Bloco 3', data: _iotHistory.b3, borderColor: '#10b981', tension: .35, pointRadius: 0, borderWidth: 1.5, borderDash: [3,2], fill: false },
+        { label: 'Bloco 4', data: _iotHistory.b4, borderColor: '#34d399', tension: .35, pointRadius: 0, borderWidth: 1.5, borderDash: [3,2], fill: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: isDark ? 'rgba(13,24,41,.95)' : 'rgba(13,24,41,.9)',
+          cornerRadius: 8, padding: 10,
+          callbacks: { label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y + '%' }
+        }
+      },
+      scales: {
+        x: { grid: { color: gc }, ticks: { font: { size: 9 }, color: tc, maxTicksLimit: 8, autoSkip: true } },
+        y: { grid: { color: gc }, ticks: { font: { size: 9 }, color: tc, callback: v => v + '%' }, min: 0, max: 100 }
+      }
+    }
+  });
+}
+
+// ── Ciclo principal ──────────────────────────────────
+async function iotTick() {
+  let data;
+
+  if (_iotCfg.simMode || !_iotCfg.apiUrl) {
+    data = _simData();
+  } else {
+    const raw = await _fetchReal();
+    if (!raw) {
+      // API falhou — marcar todos como offline
+      const el = document.getElementById('iot-alerts');
+      if (el) el.innerHTML = '<div class="iot-alert crit"><div class="iot-alert-icon">📡</div><div class="iot-alert-body"><div class="iot-alert-title">Sem conexão com os sensores</div><div class="iot-alert-ts">Verifique o endpoint da API e a rede WiFi do ESP32</div></div><span class="iot-chip">Offline</span></div>';
+      return;
+    }
+    // Normalizar: aceita array ou objeto
+    data = Array.isArray(raw)
+      ? raw.reduce((acc, s) => { acc[s.id] = s; return acc; }, {})
+      : raw;
+  }
+
+  _iotData = data;
+
+  // Atualizar cards
+  if (data.main_a) _updateCard(data.main_a, true);
+  if (data.main_b) _updateCard(data.main_b, true);
+  if (data.bloco1) _updateCard(data.bloco1, false);
+  if (data.bloco2) _updateCard(data.bloco2, false);
+  if (data.bloco3) _updateCard(data.bloco3, false);
+  if (data.bloco4) _updateCard(data.bloco4, false);
+
+  const alerts = _buildAlerts(data);
+  _updateHero(data, alerts);
+  _updateHistory(data);
+
+  // Atualizar UI configuração
+  const simBanner = document.getElementById('iot-sim-banner');
+  const simBtn = document.getElementById('iot-sim-btn');
+  const simLbl = document.getElementById('iot-sim-label');
+  if (simBanner) simBanner.style.display = _iotCfg.simMode ? 'flex' : 'none';
+  if (simLbl) simLbl.textContent = _iotCfg.simMode ? 'Desligar simulação' : 'Simular sensores';
+  if (simBtn) simBtn.style.background = _iotCfg.simMode ? '#0062cc' : 'var(--green)';
+}
+
+function iotRestart() {
+  if (_iotTimer) clearInterval(_iotTimer);
+  iotTick();
+  _iotTimer = setInterval(iotTick, (_iotCfg.interval || 30) * 1000);
+}
+
+// ── Inicializar quando painel IoT for aberto ─────────
+const _origShowPanel = window.showPanel;
+window.showPanel = function(p) {
+  _origShowPanel && _origShowPanel(p);
+  if (p === 'iot') {
+    // Popular campos de config
+    const sv = (id, v) => { const e = document.getElementById(id); if(e) e.value = v; };
+    sv('iot-api-url', _iotCfg.apiUrl);
+    sv('iot-interval', _iotCfg.interval);
+    sv('iot-cap-main', _iotCfg.capMain);
+    sv('iot-cap-upper', _iotCfg.capUpper);
+    sv('iot-thresh-main', _iotCfg.threshMain);
+    sv('iot-thresh-upper', _iotCfg.threshUpper);
+    if (!_iotTimer) iotRestart();
+    else setTimeout(_renderIotChart, 100); // re-render chart on panel show
+  }
+};
+
+// ── Auto-iniciar se já estiver no painel IoT ─────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Não inicia automaticamente — só quando o painel for aberto
+});
 
 })();
 </script>
