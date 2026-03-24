@@ -190,6 +190,194 @@ body{font-family:var(--body);background:var(--bg);color:var(--text);font-size:14
 .inst-modal-bg.open{display:flex}
 
 /* ══════════════════════════════════════════════════
+   VOZ — Botão + Modal Premium
+   ══════════════════════════════════════════════════ */
+
+/* ── Botão microfone ── */
+#btn-voice{
+  flex-shrink:0;width:40px;height:40px;
+  border-radius:var(--r);border:1.5px solid var(--border);
+  background:var(--bg2);color:var(--text3);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s,background .2s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+#btn-voice:hover{border-color:var(--blue-m);color:var(--blue);background:var(--blue-l);}
+#btn-voice.v-listening{
+  border-color:#3b82f6!important;color:#3b82f6!important;
+  background:rgba(59,130,246,.12)!important;
+  box-shadow:0 0 0 3px rgba(59,130,246,.18);
+}
+#btn-voice.v-success{
+  border-color:var(--green)!important;color:var(--green)!important;
+  background:rgba(0,122,106,.1)!important;
+}
+
+@keyframes micPulseRing{
+  0%  {box-shadow:0 0 0 0 rgba(59,130,246,.45);}
+  70% {box-shadow:0 0 0 9px rgba(59,130,246,.0);}
+  100%{box-shadow:0 0 0 0 rgba(59,130,246,.0);}
+}
+#btn-voice.v-listening{animation:micPulseRing 1.4s ease-out infinite;}
+
+/* ── Modal voz ── */
+#voice-modal{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,16,40,.6);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:1200;align-items:center;justify-content:center;
+  padding:16px;
+}
+#voice-modal.open{display:flex;}
+.vm-box{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:20px;
+  box-shadow:0 32px 80px rgba(0,20,60,.25),0 8px 24px rgba(0,20,60,.12);
+  width:100%;max-width:420px;
+  overflow:hidden;
+  animation:vmSlideUp .28s cubic-bezier(.34,1.35,.7,1) both;
+}
+@keyframes vmSlideUp{from{opacity:0;transform:translateY(32px) scale(.95);}to{opacity:1;transform:none;}}
+
+/* Header colorido */
+.vm-header{
+  padding:28px 28px 20px;
+  text-align:center;
+  position:relative;
+}
+.vm-header-listening{background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(99,102,241,.08));}
+.vm-header-confirm {background:linear-gradient(135deg,rgba(0,122,106,.12),rgba(16,185,129,.08));}
+.vm-header-error   {background:linear-gradient(135deg,rgba(192,57,43,.10),rgba(220,38,38,.06));}
+
+/* Orb animado */
+.vm-orb{
+  width:72px;height:72px;border-radius:50%;
+  margin:0 auto 14px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.vm-orb-listening{background:radial-gradient(circle,rgba(59,130,246,.25),rgba(99,102,241,.15));}
+.vm-orb-confirm  {background:radial-gradient(circle,rgba(0,180,140,.22),rgba(16,185,129,.12));}
+.vm-orb-error    {background:radial-gradient(circle,rgba(220,38,38,.20),rgba(192,57,43,.10));}
+
+/* Ripples do orb */
+.vm-orb-listening::before,.vm-orb-listening::after{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1.5px solid rgba(59,130,246,.3);
+  animation:orbRipple 2s ease-out infinite;
+}
+.vm-orb-listening::after{inset:-18px;animation-delay:.65s;border-color:rgba(59,130,246,.15);}
+@keyframes orbRipple{0%{transform:scale(.85);opacity:1;}100%{transform:scale(1.2);opacity:0;}}
+
+.vm-orb svg,.vm-orb span{position:relative;z-index:1;}
+
+.vm-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;font-family:var(--display);}
+.vm-subtitle{font-size:12px;color:var(--text3);line-height:1.5;}
+
+/* Corpo */
+.vm-body{padding:20px 28px;}
+
+/* Estado: ouvindo */
+.vm-wave-wrap{
+  display:flex;align-items:center;justify-content:center;
+  gap:4px;height:40px;margin-bottom:14px;
+}
+.vm-bar{
+  width:4px;border-radius:4px;
+  background:var(--blue);
+  animation:waveBar 1.1s ease-in-out infinite;
+  transform-origin:bottom;
+}
+.vm-bar:nth-child(1){height:12px;animation-delay:0s;}
+.vm-bar:nth-child(2){height:22px;animation-delay:.12s;}
+.vm-bar:nth-child(3){height:34px;animation-delay:.24s;}
+.vm-bar:nth-child(4){height:26px;animation-delay:.36s;}
+.vm-bar:nth-child(5){height:18px;animation-delay:.48s;}
+.vm-bar:nth-child(6){height:30px;animation-delay:.60s;}
+.vm-bar:nth-child(7){height:20px;animation-delay:.72s;}
+@keyframes waveBar{0%,100%{transform:scaleY(.4);opacity:.5;}50%{transform:scaleY(1.2);opacity:1;}}
+.vm-bar.idle{animation:none;transform:scaleY(.3);opacity:.25;}
+
+.vm-transcript{
+  min-height:44px;padding:10px 14px;
+  background:var(--bg3);border:1.5px solid var(--border);
+  border-radius:10px;font-size:14px;font-weight:600;
+  color:var(--text);text-align:center;line-height:1.4;
+  transition:border-color .2s;word-break:break-word;
+}
+.vm-transcript.has-text{border-color:var(--blue-m);}
+.vm-transcript-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:8px;min-height:16px;}
+
+/* Estado: confirmação */
+.vm-confirm-card{
+  background:linear-gradient(135deg,var(--bg3),rgba(0,122,106,.06));
+  border:2px solid rgba(0,122,106,.25);
+  border-radius:14px;padding:18px;text-align:center;
+  margin-bottom:12px;
+}
+.vm-confirm-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;font-weight:600;}
+.vm-confirm-value{
+  font-size:44px;font-weight:800;
+  color:var(--blue);font-family:var(--display);
+  line-height:1;margin-bottom:4px;
+  letter-spacing:-1px;
+}
+.vm-confirm-unit{font-size:14px;color:var(--text3);font-weight:500;}
+.vm-confirm-diff{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:12px;padding:8px 12px;
+  background:var(--bg2);border-radius:8px;
+  font-size:12px;color:var(--text2);font-weight:500;
+}
+.vm-confirm-diff-arrow{font-size:14px;}
+.vm-raw-heard{
+  font-size:11px;color:var(--text3);text-align:center;
+  margin-bottom:12px;
+  padding:6px 10px;background:var(--bg3);border-radius:6px;
+  font-style:italic;
+}
+
+/* Estado: erro */
+.vm-error-card{
+  background:rgba(220,38,38,.07);border:1.5px solid rgba(220,38,38,.2);
+  border-radius:12px;padding:14px;text-align:center;
+}
+.vm-error-msg{font-size:13px;color:var(--red);line-height:1.5;font-weight:500;}
+.vm-error-tip{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.5;}
+
+/* Footer */
+.vm-footer{
+  padding:16px 28px 24px;
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  border-top:1px solid var(--border);background:var(--bg);
+}
+.vm-btn-cancel{
+  padding:0 18px;height:38px;border-radius:8px;
+  border:1.5px solid var(--border);background:transparent;
+  color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;
+  transition:all .15s;
+}
+.vm-btn-cancel:hover{background:var(--bg3);}
+.vm-btn-retry{
+  padding:0 18px;height:38px;border-radius:8px;
+  border:1.5px solid var(--blue-m);background:var(--blue-l);
+  color:var(--blue);font-size:13px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all .15s;
+}
+.vm-btn-retry:hover{background:var(--blue-m);}
+.vm-btn-confirm{
+  padding:0 22px;height:38px;border-radius:8px;
+  border:none;background:var(--blue);
+  color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  box-shadow:0 2px 8px rgba(59,130,246,.35);
+  transition:all .15s;
+}
+.vm-btn-confirm:hover{background:#2563eb;transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,130,246,.45);}
+.vm-btn-confirm:active{transform:none;}
+
+/* ══════════════════════════════════════════════════
    MOBILE OTIMIZAÇÕES — BOTTOM NAV + TOUCH + UX
    ══════════════════════════════════════════════════ */
 
@@ -2002,7 +2190,15 @@ o consumo acumulado do período.">?</span>
           </div>
           <div class="fg-row">
             <div class="fg"><label>Data</label><input type="date" id="in-data" oninput="calcLeitPreview()"></div>
-            <div class="fg"><label>Leitura do hidrômetro (m³)</label><input type="number" id="in-leit" placeholder="50982.00" step="0.01" min="0" oninput="calcLeitPreview()"></div>
+            <div class="fg">
+              <label>Leitura do hidrômetro (m³)</label>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input type="number" id="in-leit" placeholder="50982.00" step="0.01" min="0" oninput="calcLeitPreview()" style="flex:1">
+                <button type="button" id="btn-voice" onclick="iniciarLeituraVoz()" title="Ditar leitura por voz (🎙)">
+                  <svg id="voice-icon-mic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="fg-row-2">
             <div class="fg"><label>Observação <span style="font-weight:400;color:var(--text3)">(opcional)</span></label><input type="text" id="in-obs" placeholder="Ex: leitura presencial, após manutenção..."></div>
@@ -2643,7 +2839,75 @@ ao ciclo anterior.">?</span></div>
 
 <!-- MODALS -->
 
-<!-- MODAL: Ocorrência -->
+<!-- MODAL: Leitura por voz — Premium -->
+<div id="voice-modal">
+  <div class="vm-box" id="vm-box">
+
+    <!-- HEADER (muda por estado) -->
+    <div class="vm-header vm-header-listening" id="vm-header">
+      <div class="vm-orb vm-orb-listening" id="vm-orb">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2" id="vm-orb-icon-mic">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </div>
+      <div class="vm-title" id="vm-title">Leitura por voz</div>
+      <div class="vm-subtitle" id="vm-subtitle">Diga o valor do hidrômetro em m³</div>
+    </div>
+
+    <!-- BODY -->
+    <div class="vm-body">
+
+      <!-- Estado: ouvindo -->
+      <div id="vms-listening">
+        <div class="vm-wave-wrap" id="vm-waves">
+          <div class="vm-bar idle" id="vb1"></div>
+          <div class="vm-bar idle" id="vb2"></div>
+          <div class="vm-bar idle" id="vb3"></div>
+          <div class="vm-bar idle" id="vb4"></div>
+          <div class="vm-bar idle" id="vb5"></div>
+          <div class="vm-bar idle" id="vb6"></div>
+          <div class="vm-bar idle" id="vb7"></div>
+        </div>
+        <div class="vm-transcript" id="vm-transcript">aguardando microfone...</div>
+        <div class="vm-transcript-hint" id="vm-hint"></div>
+      </div>
+
+      <!-- Estado: confirmação -->
+      <div id="vms-confirm" style="display:none">
+        <div class="vm-raw-heard" id="vm-raw-heard"></div>
+        <div class="vm-confirm-card">
+          <div class="vm-confirm-label">Leitura reconhecida</div>
+          <div class="vm-confirm-value" id="vm-conf-value">—</div>
+          <div class="vm-confirm-unit">m³</div>
+        </div>
+        <div class="vm-confirm-diff" id="vm-conf-diff" style="display:none">
+          <span class="vm-confirm-diff-arrow" id="vm-diff-arrow">↑</span>
+          <span id="vm-diff-text"></span>
+        </div>
+      </div>
+
+      <!-- Estado: erro -->
+      <div id="vms-error" style="display:none">
+        <div class="vm-error-card">
+          <div class="vm-error-msg" id="vm-err-msg"></div>
+          <div class="vm-error-tip" id="vm-err-tip"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="vm-footer" id="vm-footer">
+      <button class="vm-btn-cancel" onclick="fecharVoiceModal()">Cancelar</button>
+    </div>
+
+  </div>
+</div>
+
+
 <div class="modal-bg" id="ocorr-modal">
   <div class="modal" style="max-width:500px">
     <div class="modal-title">⚠️ Registrar ocorrência</div>
@@ -8899,12 +9163,424 @@ window.showPanel = function(p) {
   }
 };
 
+
+
+// ════════════════════════════════════════════════
+// LEITURA POR VOZ — Premium v2
+// Interpretação inteligente pt-BR + confirmação visual
+// ════════════════════════════════════════════════
+(function(){
+
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+let _recog = null;
+let _valorPendente = null;
+let _rawOuvido = '';
+
+/* ── helpers DOM ── */
+const $  = id => document.getElementById(id);
+const show = id => { const e=$(id); if(e) e.style.display=''; };
+const hide = id => { const e=$(id); if(e) e.style.display='none'; };
+
+/* ── Ondas: ativar / desativar ── */
+function _wavesOn(){
+  for(let i=1;i<=7;i++){ const b=$('vb'+i); if(b) b.classList.remove('idle'); }
+}
+function _wavesOff(){
+  for(let i=1;i<=7;i++){ const b=$('vb'+i); if(b) b.classList.add('idle'); }
+}
+
+/* ── Transição de estado do modal ── */
+function _setState(estado){
+  // estados: 'idle' | 'listening' | 'confirm' | 'error'
+  const hdr = $('vm-header');
+  const orb = $('vm-orb');
+  const title = $('vm-title');
+  const sub = $('vm-subtitle');
+
+  hide('vms-listening'); hide('vms-confirm'); hide('vms-error');
+
+  const configs = {
+    idle: {
+      hdrCls:'vm-header-listening', orbCls:'vm-orb-listening',
+      orbColor:'#3b82f6', title:'Leitura por voz',
+      sub:'Diga o valor do hidrômetro em m³',
+    },
+    listening: {
+      hdrCls:'vm-header-listening', orbCls:'vm-orb-listening',
+      orbColor:'#3b82f6', title:'Ouvindo...',
+      sub:'Fale o valor do hidrômetro agora',
+    },
+    confirm: {
+      hdrCls:'vm-header-confirm', orbCls:'vm-orb-confirm',
+      orbColor:'#00b28a', title:'Valor reconhecido',
+      sub:'Confirme antes de inserir',
+    },
+    error: {
+      hdrCls:'vm-header-error', orbCls:'vm-orb-error',
+      orbColor:'#dc2626', title:'Não reconhecido',
+      sub:'Tente falar mais claramente',
+    },
+  };
+
+  const cfg = configs[estado] || configs.idle;
+  hdr.className = 'vm-header ' + cfg.hdrCls;
+  orb.className = 'vm-orb '  + cfg.orbCls;
+
+  // ícone do orb
+  const mic = $('vm-orb-icon-mic');
+  if(mic) mic.setAttribute('stroke', cfg.orbColor);
+
+  if(title) title.textContent = cfg.title;
+  if(sub)   sub.textContent   = cfg.sub;
+
+  if(estado === 'listening'){ show('vms-listening'); _wavesOn(); }
+  else if(estado === 'idle'){ show('vms-listening'); _wavesOff(); }
+  else if(estado === 'confirm'){ show('vms-confirm'); }
+  else if(estado === 'error')  { show('vms-error');   }
+}
+
+/* ── Atualizar footer (botões) ── */
+function _setFooter(estado){
+  const f = $('vm-footer');
+  if(!f) return;
+  if(estado === 'listening'){
+    f.innerHTML = `<button class="vm-btn-cancel" onclick="fecharVoiceModal()">Cancelar</button>`;
+  } else if(estado === 'confirm'){
+    f.innerHTML = `
+      <button class="vm-btn-cancel" onclick="fecharVoiceModal()">Cancelar</button>
+      <button class="vm-btn-retry" onclick="window._voiceRetry()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+        Tentar novamente
+      </button>
+      <button class="vm-btn-confirm" onclick="window._voiceConfirmar()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg>
+        Confirmar
+      </button>`;
+  } else if(estado === 'error'){
+    f.innerHTML = `
+      <button class="vm-btn-cancel" onclick="fecharVoiceModal()">Cancelar</button>
+      <button class="vm-btn-retry" onclick="window._voiceRetry()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3"/></svg>
+        Tentar novamente
+      </button>`;
+  } else {
+    f.innerHTML = `<button class="vm-btn-cancel" onclick="fecharVoiceModal()">Cancelar</button>`;
+  }
+}
+
+/* ── Interpretação inteligente de números pt-BR ── */
+const UNIDADES = {
+  'zero':0,'um':1,'uma':1,'dois':2,'duas':2,'três':3,'tres':3,
+  'quatro':4,'cinco':5,'seis':6,'sete':7,'oito':8,'nove':9,
+  'dez':10,'onze':11,'doze':12,'treze':13,'quatorze':14,'catorze':14,
+  'quinze':15,'dezesseis':16,'dezessete':17,'dezoito':18,'dezenove':19,
+  'vinte':20,'trinta':30,'quarenta':40,'cinquenta':50,'sessenta':60,
+  'setenta':70,'oitenta':80,'noventa':90,
+  'cem':100,'cento':100,'duzentos':200,'duzentas':200,
+  'trezentos':300,'trezentas':300,'quatrocentos':400,'quatrocentas':400,
+  'quinhentos':500,'quinhentas':500,'seiscentos':600,'seiscentas':600,
+  'setecentos':700,'setecentas':700,'oitocentos':800,'oitocentas':800,
+  'novecentos':900,'novecentas':900,
+  'mil':1000,'milhão':1000000,'milhao':1000000,
+};
+
+function _parseExtenso(texto){
+  // Tentar converter número por extenso em pt-BR
+  let t = texto.toLowerCase()
+    .replace(/[àáâãäå]/g,'a').replace(/[èéêë]/g,'e')
+    .replace(/[ìíîï]/g,'i').replace(/[òóôõö]/g,'o')
+    .replace(/[ùúûü]/g,'u').replace(/ç/g,'c').replace(/nh/g,' ')
+    .replace(/\be\b/g,' ').replace(/\bde\b/g,' ').replace(/\bcom\b/g,'.')
+    .replace(/\bvirgula\b|\bvirgüla\b|\bponto\b|\bponto e\b/g,'.')
+    .replace(/,/g,'.').trim();
+
+  // Primeiro: tentar extrair dígitos direto (mais confiável)
+  const mDig = t.match(/(\d[\d\s]*(?:[.,]\d+)?)/);
+  if(mDig){
+    const raw = mDig[1].replace(/\s+/g,'').replace(',','.');
+    const n = parseFloat(raw);
+    if(!isNaN(n) && n > 0) return n;
+  }
+
+  // Segundo: interpretar por extenso
+  // Separar parte inteira e decimal pelo '.'
+  const partes = t.split('.');
+  const inteiraStr = partes[0].trim();
+  const decimalStr = partes[1] ? partes[1].trim() : null;
+
+  let inteiro = _parseInteiroExtenso(inteiraStr);
+  if(inteiro === null) return null;
+
+  let decimal = 0;
+  if(decimalStr){
+    const dNum = _parseInteiroExtenso(decimalStr);
+    if(dNum !== null){
+      // "ponto três" → .3, "ponto trinta" → .30
+      const casas = decimalStr.replace(/\s+/g,'').length <= 2 ? 1 : 2;
+      decimal = dNum / Math.pow(10, String(dNum).length);
+    }
+  }
+
+  return inteiro + decimal;
+}
+
+function _parseInteiroExtenso(str){
+  if(!str) return 0;
+  const words = str.trim().split(/\s+/);
+  let total = 0, current = 0;
+  for(const w of words){
+    const v = UNIDADES[w];
+    if(v === undefined) continue;
+    if(v === 1000){
+      current = current === 0 ? 1 : current;
+      total += current * 1000;
+      current = 0;
+    } else if(v === 1000000){
+      current = current === 0 ? 1 : current;
+      total += current * 1000000;
+      current = 0;
+    } else {
+      current += v;
+    }
+  }
+  total += current;
+  return total > 0 ? total : null;
+}
+
+function _extrairNumero(texto){
+  if(!texto) return null;
+  const v = _parseExtenso(texto);
+  if(v !== null && v > 0) return v;
+  return null;
+}
+
+/* ── Calcular diff com leitura anterior ── */
+function _calcDiff(novoValor){
+  const dataEl = $('in-data');
+  if(!dataEl || !dataEl.value) return null;
+  try{
+    const data = dataEl.value;
+    const c = getCiclo(curIdx);
+    const anc = getAncora(curIdx);
+    const todos = anc ? [anc,...(c?c.lancamentos:[])] : (c?c.lancamentos:[]);
+    const antes = todos.filter(l=>l.data<data).sort((a,b)=>b.data.localeCompare(a.data));
+    const ref = antes[0];
+    if(!ref) return null;
+    const cons = novoValor - ref.leitura;
+    const dias = Math.max(1, diffDias(ref.data, data));
+    return { cons, dias, refData: ref.data, refLeit: ref.leitura };
+  }catch(e){ return null; }
+}
+
+/* ── Mostrar confirmação ── */
+function _mostrarConfirm(valor, rawTexto){
+  _valorPendente = valor;
+
+  // Valor formatado
+  const vFmt = valor % 1 === 0
+    ? valor.toLocaleString('pt-BR')
+    : valor.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:3});
+  $('vm-conf-value').textContent = vFmt;
+
+  // O que foi ouvido
+  if(rawTexto){
+    $('vm-raw-heard').textContent = '🎙 "' + rawTexto.substring(0,60) + '"';
+    show('vm-raw-heard');
+  } else {
+    hide('vm-raw-heard');
+  }
+
+  // Diff
+  const diff = _calcDiff(valor);
+  const diffEl = $('vm-conf-diff');
+  if(diff && diffEl){
+    const sinal = diff.cons >= 0 ? '↑' : '↓';
+    const cor = diff.cons < 0 ? '#dc2626' : diff.cons === 0 ? 'var(--text3)' : 'var(--green)';
+    $('vm-diff-arrow').textContent = sinal;
+    $('vm-diff-arrow').style.color = cor;
+    const desde = diff.dias === 1 ? 'desde ontem' : 'em ' + diff.dias + ' dia' + (diff.dias>1?'s':'');
+    $('vm-diff-text').textContent =
+      Math.abs(diff.cons).toFixed(2) + ' m³ consumido ' + desde +
+      ' (ref: ' + fmtFull(diff.refData) + ')';
+    $('vm-diff-text').style.color = cor;
+    show('vm-conf-diff');
+  } else {
+    hide('vm-conf-diff');
+  }
+
+  _setState('confirm');
+  _setFooter('confirm');
+}
+
+/* ── Mostrar erro ── */
+function _mostrarErro(msg, tip){
+  $('vm-err-msg').textContent = msg || 'Não foi possível reconhecer o valor.';
+  $('vm-err-tip').textContent = tip || 'Tente falar apenas os números: "cinquenta e um mil novecentos e oito"';
+  _setState('error');
+  _setFooter('error');
+}
+
+/* ── Reconhecimento ── */
+function _iniciarRecog(){
+  if(!SpeechRec){
+    _mostrarErro('Navegador não suporta reconhecimento de voz.','Use Chrome ou Edge para esta função.');
+    return;
+  }
+  if(_recog){ try{ _recog.abort(); }catch(e){} }
+
+  _recog = new SpeechRec();
+  _recog.lang = 'pt-BR';
+  _recog.interimResults = true;
+  _recog.maxAlternatives = 5;
+  _recog.continuous = false;
+
+  const transcript = $('vm-transcript');
+  const hint = $('vm-hint');
+
+  _recog.onstart = function(){
+    _setBtnListening(true);
+    _setState('listening');
+    _setFooter('listening');
+    if(transcript){ transcript.textContent = '...'; transcript.className = 'vm-transcript'; }
+    if(hint){ hint.textContent = '🔴 gravando — diga o valor agora'; }
+  };
+
+  _recog.onresult = function(event){
+    let interim = '', final = '';
+    for(let i = event.resultIndex; i < event.results.length; i++){
+      const t = event.results[i][0].transcript;
+      if(event.results[i].isFinal) final += t; else interim += t;
+    }
+    const exibir = (final || interim).trim();
+    _rawOuvido = exibir;
+    if(transcript){
+      transcript.textContent = exibir || '...';
+      transcript.className = 'vm-transcript' + (exibir ? ' has-text' : '');
+    }
+    if(hint && !final){ hint.textContent = '🔴 gravando...'; }
+
+    if(final){
+      if(hint) hint.textContent = '⏳ interpretando...';
+      _setBtnListening(false);
+
+      // Tentar extrair de todas as alternativas
+      let valor = null;
+      for(let i = 0; i < event.results.length && valor === null; i++){
+        for(let j = 0; j < event.results[i].length && valor === null; j++){
+          valor = _extrairNumero(event.results[i][j].transcript);
+        }
+      }
+
+      if(valor !== null){
+        _mostrarConfirm(valor, final);
+      } else {
+        _mostrarErro(
+          'Não consegui extrair um número de "' + final.substring(0,50) + '".',
+          'Dica: diga os dígitos claramente — ex: "cinquenta e um mil trezentos e vinte"'
+        );
+      }
+    }
+  };
+
+  _recog.onerror = function(ev){
+    _setBtnListening(false);
+    const msgs = {
+      'not-allowed':  ['Permissão de microfone negada.', 'Habilite o microfone nas configurações do navegador (cadeado na barra de endereço).'],
+      'no-speech':    ['Nenhuma fala detectada.', 'Fale mais perto do microfone ou aumente o volume.'],
+      'network':      ['Erro de rede.', 'Verifique sua conexão — reconhecimento de voz requer internet.'],
+      'audio-capture':['Microfone não encontrado.', 'Verifique se o microfone está conectado e funcionando.'],
+    };
+    const [msg, tip] = msgs[ev.error] || ['Erro: ' + ev.error, ''];
+    if(ev.error !== 'aborted') _mostrarErro(msg, tip);
+  };
+
+  _recog.onend = function(){
+    _setBtnListening(false);
+  };
+
+  try{ _recog.start(); }
+  catch(e){ _mostrarErro('Não foi possível iniciar o microfone: ' + e.message); }
+}
+
+/* ── Botão mic: visual ── */
+function _setBtnListening(on){
+  const btn = $('btn-voice');
+  if(!btn) return;
+  btn.classList.toggle('v-listening', on);
+}
+
+/* ── API pública ── */
+window.iniciarLeituraVoz = function(){
+  const modal = $('voice-modal');
+  if(modal){
+    modal.classList.add('open');
+    modal.onclick = e => { if(e.target === modal) fecharVoiceModal(); };
+  }
+  _valorPendente = null;
+  _rawOuvido = '';
+
+  // Reset estado
+  const transcript = $('vm-transcript');
+  const hint = $('vm-hint');
+  if(transcript){ transcript.textContent = 'aguardando microfone...'; transcript.className = 'vm-transcript'; }
+  if(hint) hint.textContent = '';
+  _wavesOff();
+  _setState('idle');
+  _setFooter('idle');
+
+  // Verificar suporte antes de pedir permissão
+  if(!SpeechRec){
+    _mostrarErro('Navegador sem suporte a voz.','Use Chrome ou Microsoft Edge.');
+    _setFooter('error');
+    return;
+  }
+  // Pequeno delay para animação do modal antes de pedir microfone
+  setTimeout(_iniciarRecog, 220);
+};
+
+window.fecharVoiceModal = function(){
+  if(_recog){ try{ _recog.abort(); }catch(e){} _recog = null; }
+  _setBtnListening(false);
+  const m = $('voice-modal');
+  if(m) m.classList.remove('open');
+};
+
+window._voiceRetry = function(){
+  _valorPendente = null;
+  _rawOuvido = '';
+  const transcript = $('vm-transcript');
+  if(transcript){ transcript.textContent = 'aguardando microfone...'; transcript.className = 'vm-transcript'; }
+  _wavesOff();
+  _setState('idle');
+  _setFooter('idle');
+  setTimeout(_iniciarRecog, 80);
+};
+
+window._voiceConfirmar = function(){
+  if(_valorPendente === null) return;
+  const v = _valorPendente;
+  $('in-leit').value = v % 1 === 0 ? v : parseFloat(v.toFixed(3));
+  calcLeitPreview();
+  fecharVoiceModal();
+
+  // Feedback visual no botão
+  const btn = $('btn-voice');
+  if(btn){
+    btn.classList.add('v-success');
+    setTimeout(()=>btn.classList.remove('v-success'), 2000);
+  }
+
+  showToast('✓ Leitura ' + v.toLocaleString('pt-BR') + ' m³ inserida por voz!');
+  setTimeout(()=>{ const o=$('in-obs'); if(o) o.focus(); }, 200);
+};
+
 // ── Auto-iniciar se já estiver no painel IoT ─────────
 document.addEventListener('DOMContentLoaded', () => {
   // Não inicia automaticamente — só quando o painel for aberto
 });
 
 })();
+
 </script>
 
 </body>
