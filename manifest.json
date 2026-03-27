@@ -5,30 +5,41 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "any",
-  "background_color": "#0d1829",
+  "orientation": "portrait-primary",
   "theme_color": "#005EC0",
+  "background_color": "#eef5fc",
   "lang": "pt-BR",
-  "categories": [
-    "utilities",
-    "productivity"
-  ],
+  "dir": "ltr",
+  "categories": ["utilities", "productivity"],
+
   "icons": [
     {
-      "src": "icons/icon-16.png",
-      "sizes": "16x16",
+      "src": "icons/icon-72.png",
+      "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-32.png",
-      "sizes": "32x32",
+      "src": "icons/icon-96.png",
+      "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-180.png",
-      "sizes": "180x180",
+      "src": "icons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-152.png",
+      "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
@@ -39,59 +50,56 @@
       "purpose": "any"
     },
     {
+      "src": "icons/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
+
   "screenshots": [
     {
-      "src": "screenshots/screenshot-mobile-1.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Dashboard — visão geral do ciclo"
-    },
-    {
-      "src": "screenshots/screenshot-mobile-2.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Lançamentos — registrar leitura"
-    },
-    {
-      "src": "screenshots/screenshot-desktop-1.png",
+      "src": "screenshots/desktop.png",
       "sizes": "1280x800",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Dashboard Desktop"
+      "label": "Dashboard HidroSmart"
+    },
+    {
+      "src": "screenshots/mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "HidroSmart no celular"
     }
   ],
+
   "shortcuts": [
     {
-      "name": "Lançar leitura",
-      "short_name": "Lançar",
+      "name": "Novo lançamento",
+      "short_name": "Lançamento",
       "description": "Registrar nova leitura do hidrômetro",
-      "url": "./#lanc",
-      "icons": [
-        {
-          "src": "icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "url": "./?shortcut=lancamento",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
     },
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
-      "description": "Ver resumo do ciclo atual",
-      "url": "./#dash",
-      "icons": [
-        {
-          "src": "icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
+      "description": "Ver painel principal",
+      "url": "./?shortcut=dashboard",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
     }
-  ]
+  ],
+
+  "prefer_related_applications": false,
+
+  "related_applications": [],
+
+  "display_override": ["standalone", "minimal-ui", "browser"]
 }
