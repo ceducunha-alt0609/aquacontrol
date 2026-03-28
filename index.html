@@ -1943,15 +1943,19 @@ ao ciclo anterior.">?</span></div>
 </div>
  <!-- ── SENSORES IoT ── -->
  <div id="panel-iot" class="panel">
+ <div class="page-hdr" style="margin-bottom:12px">
+  <div><div class="page-title">Sensores IoT</div><div class="page-sub">Monitoramento em tempo real</div></div>
+  <button onclick="toggleKiosk()" id="iot-kiosk-btn" class="btn btn-sm btn-ghost" title="Modo kiosk — oculta menus para exibição em painel" style="gap:6px;flex-shrink:0">
+   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+   <span class="infobtn-label">Modo kiosk</span>
+  </button>
+ </div>
  <div class="iot-sim-banner" id="iot-sim-banner" style="display:none">
  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
  <span><strong>Modo demonstração</strong> — dados simulados. Configure o endpoint da API para conectar sensores reais.</span>
  <button onclick="iotToggleSim()" id="iot-sim-btn" style="margin-left:auto;padding:3px 10px;background:var(--amber);color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0">Desligar</button>
  </div>
  <div class="iot2-hero" id="iot-hero" style="position:relative">
-<button onclick="toggleKiosk()" id="iot-kiosk-btn" title="Modo kiosk / tela cheia" style="position:absolute;top:10px;right:10px;z-index:10;width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.25)'" onmouseleave="this.style.background='rgba(255,255,255,.15)'">
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-</button>
  <div class="iot2-hero-inner">
   <div class="iot2-hero-row1">
   <div class="iot2-ring-wrap">
@@ -3788,15 +3792,13 @@ function renderFcInline(){
   const c=getCiclo(curIdx),anc=getAncora(curIdx);
   if(!c||!c.lancamentos.length){
     el.innerHTML=`<div class="fc-title" style="margin-bottom:8px">📊 Previsão</div><div style="font-size:12px;color:var(--text3)">Adicione leituras para ver a previsão.${!anc?'<br><strong style="color:var(--amber)">⚠ Configure a leitura anterior.</strong>':''}</div>`;
-    renderLancTank(0,S.config.meta||800);const td=document.getElementById('tank-desc');if(td)td.textContent='de '+(S.config.meta||'—')+' m³';return;
+    renderTank(0,S.config.meta||800);const td=document.getElementById('tank-desc');if(td)td.textContent='de '+(S.config.meta||'—')+' m³';return;
   }
   const prev=calcPrev(c,anc);const meta=S.config.meta||0,tarifa=S.config.tarifa||0;
   const pct=meta>0?(prev.acc/meta*100):0;
   const _fxFC=meta>0?_faixaLimite(pct,meta,prev.acc):null;
   const cor=_fxFC?_fxFC.corVar:'var(--blue)';
-  renderLancTank(prev.acc,meta);
-  const _htc=document.getElementById('hero-tank-collapsible');
-  if(_htc&&_htc.classList.contains('collapsed'))_lancTankStop();
+  renderTank(prev.acc,meta);
   const td=document.getElementById('tank-desc');if(td)td.textContent=meta>0?`de ${meta} m³`:`consumidos`;
   const titulo=prev.encerrado?`Encerrado · ${fmtShort(c.inicio)} → ${fmtShort(c.termino)} · ${prev.dias} dias`:`Em aberto · ${prev.decorridos} dias decorridos`;
   const baseInfo=prev.base!==null?`Base: <strong style="font-family:var(--mono)">${Math.round(prev.base)} m³</strong>`:'<span style="color:var(--amber)">⚠ Sem leitura base</span>';
@@ -7773,26 +7775,24 @@ window.addEventListener('beforeunload',function(e){
         // Durante zoom de pinça: ancora o nav à borda inferior do visualViewport
         // para que ele permaneça sempre visível independente de scroll/zoom
         const navH = bottomNav.offsetHeight || 60;
-        const safeBottom = parseFloat(
-          getComputedStyle(document.documentElement)
-            .getPropertyValue('--sab') || '0'
-        ) || 0;
 
         bottomNav.style.position  = 'fixed';
         bottomNav.style.top       = (offsetTop + vvH - navH) + 'px';
         bottomNav.style.left      = offsetLeft + 'px';
-        bottomNav.style.right     = '';
-        bottomNav.style.width     = (vvH * scale < winH ? vv.width + 'px' : '');
-        bottomNav.style.bottom    = '';
-        bottomNav.style.transform = '';
+        // 'auto' sobrescreve o right:0 e bottom:0 do CSS; '' não sobrescreve
+        bottomNav.style.right     = 'auto';
+        bottomNav.style.bottom    = 'auto';
+        // Garante que a largura cobre exatamente o visual viewport (condição anterior era sempre falsa)
+        bottomNav.style.width     = vv.width + 'px';
+        bottomNav.style.transform = 'none';
       } else {
         // Sem zoom: restaura posicionamento CSS normal
         bottomNav.style.position  = '';
         bottomNav.style.top       = '';
         bottomNav.style.left      = '';
         bottomNav.style.right     = '';
-        bottomNav.style.width     = '';
         bottomNav.style.bottom    = '';
+        bottomNav.style.width     = '';
         // Teclado virtual: empurra o nav para cima
         bottomNav.style.transform = keyboardH > 100
           ? `translateY(-${keyboardH}px)` : '';
