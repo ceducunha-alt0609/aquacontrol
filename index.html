@@ -3605,12 +3605,49 @@ function atualizarBadgeDias(){
   if(scroll)scroll.insertBefore(banner,scroll.firstChild);
 }
 /* §5 MAIN RENDER */
+function _updateDashBackground(){
+  // Atualiza silenciosamente os elementos do dashboard mesmo quando outro painel está ativo,
+  // para que ao voltar ao dashboard os dados já estejam corretos sem piscar.
+  if(!S||!S.config)return;
+  const c=getCiclo(0),anc=getAncora(0);
+  const prev=c?calcPrev(c,anc):null;
+  const meta=S.config.meta||0;
+  const acc=prev?prev.acc:0;
+  // Atualiza o fill target do tank animado do dashboard (se existir)
+  if(typeof _dashTankAnim!=='undefined'&&meta>0){
+    _dashTankAnim.fillTarget=Math.min(1,acc/meta);
+  }
+  // Atualiza elementos de texto do dash que existem permanentemente no DOM
+  const elAcc=document.getElementById('hs-acc');
+  if(elAcc)elAcc.textContent=Math.round(acc)||'—';
+  const pctMeta=meta>0?(acc/meta*100):0;
+  if(meta>0){
+    const pf=Math.min(100,pctMeta);
+    const fill=document.getElementById('hs-prog-fill');
+    if(fill){fill.style.width=pf.toFixed(1)+'%';fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'');}
+    const pp=document.getElementById('hs-prog-pct');if(pp)pp.textContent=Math.round(pf)+'%';
+    const pw=document.getElementById('hs-prog-wrap');if(pw)pw.style.display='block';
+  }
+  // Atualiza a pill de status no topbar
+  const tPill=document.getElementById('t-status-pill');
+  const tTxt=document.getElementById('t-status-txt');
+  if(tPill&&meta>0&&prev){
+    const p=Math.round(pctMeta);
+    tPill.className='t-status-pill '+(p>=100?'danger':p>=75?'warn':'ok');
+    tPill.style.display='inline-flex';
+    if(tTxt)tTxt.textContent=Math.round(acc)+' m³ · '+p+'% do limite';
+  }
+}
 function render(){
   renderCycleNav();
   renderHdrMeta();
   if(activePanel==='dash'){
     renderDash();
-  } else if(activePanel==='lanc'){
+  } else {
+    // Mantém os dados do dashboard atualizados em background
+    _updateDashBackground();
+  }
+  if(activePanel==='lanc'){
     renderAncoraCard();renderAlert();renderStatRow();renderFcInline();
     renderMetrics();renderTable();renderTerminoRow();renderLeitTag();
     renderManutAlertLanc();
@@ -7773,26 +7810,34 @@ window.addEventListener('beforeunload',function(e){
 
       if(isZoom) {
         // Durante zoom de pinça: ancora o nav à borda inferior do visualViewport
-        // para que ele permaneça sempre visível independente de scroll/zoom
-        const navH = bottomNav.offsetHeight || 60;
+        // e contra-escala para que ele permaneça no tamanho visual original
+        const invScale = 1 / scale;
+        // Largura real que a barra deve ter em CSS pixels para ocupar 100% do visual viewport
+        const targetW  = vv.width;
+        // Altura natural da barra em CSS pixels (60px) × scale = altura visual que ela teria sem correção
+        // Para manter 60px visuais, usamos invScale no transform
+        const navH     = Math.round(60 * scale); // altura CSS com zoom aplicado
 
-        bottomNav.style.position  = 'fixed';
-        bottomNav.style.top       = (offsetTop + vvH - navH) + 'px';
-        bottomNav.style.left      = offsetLeft + 'px';
-        // 'auto' sobrescreve o right:0 e bottom:0 do CSS; '' não sobrescreve
-        bottomNav.style.right     = 'auto';
-        bottomNav.style.bottom    = 'auto';
-        // Garante que a largura cobre exatamente o visual viewport (condição anterior era sempre falsa)
-        bottomNav.style.width     = vv.width + 'px';
-        bottomNav.style.transform = 'none';
+        bottomNav.style.position        = 'fixed';
+        bottomNav.style.bottom          = 'auto';
+        bottomNav.style.right           = 'auto';
+        bottomNav.style.top             = (offsetTop + vvH - navH) + 'px';
+        bottomNav.style.left            = offsetLeft + 'px';
+        bottomNav.style.width           = targetW + 'px';
+        bottomNav.style.transformOrigin = 'bottom left';
+        bottomNav.style.transform       = `scale(${invScale})`;
+        // Garante que o elemento não quebre o layout depois dele
+        bottomNav.style.marginBottom    = '0';
       } else {
         // Sem zoom: restaura posicionamento CSS normal
-        bottomNav.style.position  = '';
-        bottomNav.style.top       = '';
-        bottomNav.style.left      = '';
-        bottomNav.style.right     = '';
-        bottomNav.style.bottom    = '';
-        bottomNav.style.width     = '';
+        bottomNav.style.position        = '';
+        bottomNav.style.top             = '';
+        bottomNav.style.left            = '';
+        bottomNav.style.right           = '';
+        bottomNav.style.bottom          = '';
+        bottomNav.style.width           = '';
+        bottomNav.style.transformOrigin = '';
+        bottomNav.style.marginBottom    = '';
         // Teclado virtual: empurra o nav para cima
         bottomNav.style.transform = keyboardH > 100
           ? `translateY(-${keyboardH}px)` : '';
@@ -8522,10 +8567,11 @@ function iot2ToggleCfg() {
   var chev = document.getElementById('iot2-cfg-chevron');
   var tog  = document.querySelector('.iot2-cfg-toggle');
   if (!body) return;
-  var isOpen = body.style.display === 'block';
+  // Usa getComputedStyle para detectar o estado real, independente de CSS ou inline style
+  var isOpen = window.getComputedStyle(body).display !== 'none';
   body.style.display = isOpen ? 'none' : 'block';
   if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
-  if (tog)  tog.style.borderRadius = isOpen ? 'var(--rl)' : 'var(--rl) var(--rl) 0 0';
+  if (tog)  tog.style.borderRadius = isOpen ? '' : 'var(--rl) var(--rl) 0 0';
 }
 
 window.iotToggleAnalise = function() {
@@ -8533,10 +8579,10 @@ window.iotToggleAnalise = function() {
   var chev = document.getElementById('iot-analise-chevron');
   var tog  = document.getElementById('iot-analise-toggle');
   if (!body) return;
-  var isOpen = body.style.display === 'block';
+  var isOpen = window.getComputedStyle(body).display !== 'none';
   body.style.display = isOpen ? 'none' : 'block';
   if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
-  if (tog)  tog.style.borderRadius = isOpen ? 'var(--rl)' : 'var(--rl) var(--rl) 0 0';
+  if (tog)  tog.style.borderRadius = isOpen ? '' : 'var(--rl) var(--rl) 0 0';
 };
 
 window.iot2ToggleCfgFixed = function() {
@@ -8544,10 +8590,10 @@ window.iot2ToggleCfgFixed = function() {
   var chev = document.getElementById('iot2-cfg-chevron');
   var tog  = document.querySelector('.iot2-cfg-toggle');
   if (!body) return;
-  var isOpen = body.style.display === 'block';
+  var isOpen = window.getComputedStyle(body).display !== 'none';
   body.style.display = isOpen ? 'none' : 'block';
   if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
-  if (tog)  tog.style.borderRadius = isOpen ? 'var(--rl)' : 'var(--rl) var(--rl) 0 0';
+  if (tog)  tog.style.borderRadius = isOpen ? '' : 'var(--rl) var(--rl) 0 0';
 };
 function _iot2UpdateRing(score) {
   const arc = document.getElementById('iot2-ring-arc');
