@@ -8727,16 +8727,26 @@ initSidebarCollapse();
 initHeroTankMobile();
 showPanel('dash');
 atualizarBadgeDias();
-setTimeout(()=>{
+// Splash: esconde assim que o app renderizar (máx 800ms)
+(function hideSplash(){
  const s=document.getElementById('app-splash');
- if(s)s.classList.add('hidden');
- if(activePanel==='dash'){
- const c=getCiclo(0),anc=getAncora(0);
- const prev=c?calcPrev(c,anc):null;
- const acc=prev?prev.acc:0;
- const meta=S.config.meta||0;
+ if(!s)return;
+ const hide=()=>s.classList.add('hidden');
+ // Tenta via requestAnimationFrame para esconder após primeiro frame pintado
+ if(typeof requestAnimationFrame!=='undefined'){
+  requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(hide,200)));
+ } else {
+  setTimeout(hide,800);
  }
-},3500);
+ // Fallback máximo de segurança
+ setTimeout(hide,800);
+ if(activePanel==='dash'){
+  const c=getCiclo(0),anc=getAncora(0);
+  const prev=c?calcPrev(c,anc):null;
+  const acc=prev?prev.acc:0;
+  const meta=S.config.meta||0;
+ }
+})();
 setTimeout(()=>{showOnboarding();showWelcome();},600);
 setTimeout(()=>{verificarLimiar('abertura');verificarAlertasManutencao();},1500);
 if(_syncMeta.binId&&_syncMeta.apiKey) updateSyncUI('connected');</script>
