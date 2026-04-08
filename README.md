@@ -1,91 +1,113 @@
 # 💧 HidroSmart
 
-**Gestão inteligente de infraestrutura hídrica para condomínios**
-
-> PWA mobile-first · Single-file · Offline-ready · GitHub Pages
+**Controle de consumo de água para condomínios** — PWA (Progressive Web App) completa, instalável em mobile, desktop e web, sem servidor backend.
 
 ---
 
-## 📱 Acesso
+## 🚀 Deploy rápido
 
-**GitHub Pages:** `https://<usuario>.github.io/<repositorio>/`
+### GitHub Pages (gratuito)
 
-Para instalar como app no celular: abra no Chrome → menu (⋮) → *Adicionar à tela inicial*.
+```bash
+# 1. Clone ou faça upload dos arquivos para um repositório público
+git init
+git add .
+git commit -m "HidroSmart v2.0"
+git branch -M main
+git remote add origin https://github.com/SEU_USUARIO/hidrosmart.git
+git push -u origin main
+
+# 2. No GitHub: Settings → Pages → Source: "Deploy from a branch" → main → / (root)
+```
+
+A URL ficará: `https://SEU_USUARIO.github.io/hidrosmart/`
+
+### Vercel (gratuito, recomendado para domínio customizado)
+
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+Ou conecte o repositório em [vercel.com](https://vercel.com) e o deploy é automático.
+
+---
+
+## 📁 Estrutura de arquivos
+
+```
+hidrosmart/
+├── index.html          # App completa (single-file PWA)
+├── manifest.json       # Manifesto PWA (nome, ícones, cores)
+├── sw.js               # Service Worker (cache offline)
+├── icon-192.png        # Ícone 192×192 px
+├── icon-512.png        # Ícone 512×512 px
+├── browserconfig.xml   # Configuração para Windows/Edge
+├── vercel.json         # Config de deploy Vercel
+├── .nojekyll           # Desativa Jekyll no GitHub Pages
+└── README.md           # Este arquivo
+```
+
+---
+
+## 📱 Instalação como app (PWA)
+
+### Android / Chrome
+1. Abra a URL no Chrome
+2. Toque nos **⋮** (três pontos) → **"Adicionar à tela inicial"**
+3. O app aparece na tela inicial como app nativo
+
+### iPhone / Safari
+1. Abra a URL no Safari
+2. Toque em **Compartilhar** (ícone de caixa com seta) → **"Adicionar à Tela de Início"**
+3. Confirme o nome e toque em **Adicionar**
+
+### Desktop (Chrome / Edge)
+1. Abra a URL no navegador
+2. Clique no ícone de **instalação** (⊕) na barra de endereço
+3. Ou: menu ⋮ → **"Instalar HidroSmart"**
 
 ---
 
 ## ✨ Funcionalidades
 
-- 📊 Monitoramento de consumo de água por unidade
-- 📈 Histórico comparativo mensal com gráficos
-- 🚨 Alertas de consumo por cores
-- 🔄 Sincronização automática com backup em nuvem
-- 📥 Importação de dados via Excel (múltiplos arquivos)
-- 🎨 Tema claro/escuro
-- 📴 Funcionamento offline (Service Worker)
+| Módulo | Descrição |
+|--------|-----------|
+| 🏠 Dashboard | Visão geral com KPIs, tanques, histórico e alertas |
+| 💧 Ciclos de leitura | Registro e acompanhamento por período |
+| 📊 Análise mensal | Gráficos de consumo, tendências e projeções |
+| 🔧 Manutenção | Controle de equipamentos e histórico de serviços |
+| 📋 Ocorrências | Registro e acompanhamento de problemas |
+| 💰 Faturamento | Cálculo de tarifas e geração de boletos |
+| 🛡️ Saúde do sistema | Score geral e alertas inteligentes |
+| 🌐 IoT | Monitoramento de sensores em tempo real |
+| 🧮 Calculadoras | Hidráulica, vazão, HMT, bomba, tubulação |
+| ⚙️ Configurações | Multi-instalação, tarifas, dark mode |
 
 ---
 
-## 🗂️ Estrutura
+## 🔧 Tecnologias
 
-```
-├── index.html       ← App completo (HTML + CSS + JS inline)
-├── manifest.json    ← Configuração PWA
-├── sw.js            ← Service Worker (cache offline)
-├── .nojekyll        ← Desativa processamento Jekyll no GitHub Pages
-├── vercel.json      ← Headers e rewrites para deploy no Vercel
-├── icons/           ← Ícones PWA (72 → 512px)
-└── screenshots/     ← Screenshots para manifest (opcional)
-```
+- **HTML5 / CSS3 / JavaScript** — zero dependências externas
+- **PWA** — instalável, funciona offline via Service Worker
+- **LocalStorage** — dados persistidos localmente no dispositivo
+- **Canvas API** — gráficos renderizados nativamente
+- **Web Fonts** — Outfit, Inter, JetBrains Mono (Google Fonts)
 
 ---
 
-## 🚀 Deploy
+## 🌙 Dark Mode
 
-### GitHub Pages
-
-1. Faça push do repositório para o GitHub
-2. Vá em **Settings → Pages**
-3. Em *Source*, selecione **Deploy from a branch**
-4. Selecione a branch `main` e pasta `/ (root)`
-5. Salve — o app estará disponível em instantes
-
-### Vercel
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-1. Importe o repositório no [Vercel](https://vercel.com)
-2. Framework: **Other**
-3. Build command: *(deixar vazio)*
-4. Output directory: `.`
-5. Clique em **Deploy**
+O app detecta automaticamente o tema do sistema (claro/escuro) e também permite alternar manualmente pelo botão na barra superior.
 
 ---
 
-## ⚙️ Registro do Service Worker
+## 📦 Atualização do app
 
-O `index.html` deve registrar o SW. Verifique se contém este trecho (ou adicione antes de `</body>`):
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(r => console.log('SW registrado:', r.scope))
-        .catch(e => console.error('SW falhou:', e));
-    });
-  }
-</script>
-```
+Quando uma nova versão for publicada, o Service Worker detecta automaticamente e atualiza o cache na próxima visita. Nenhuma ação manual necessária.
 
 ---
 
-## 📋 Versão
+## 📄 Licença
 
-| Versão | Data | Notas |
-|--------|------|-------|
-| 2.0 | 2026-03-24 | Release atual |
-
----
-
-*Desenvolvido para gestão condominial · PWA otimizado para Android*
+Uso interno / privado. Todos os direitos reservados.

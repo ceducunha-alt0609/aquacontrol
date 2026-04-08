@@ -1,60 +1,74 @@
-// HidroSmart v2.0 — Service Worker
-const CACHE_NAME = 'hidrosmart-v2.0';
-const ASSETS = [
+/* ============================================================
+   HidroSmart — Service Worker  v2.0
+   Cache-first para assets estáticos, network-first para HTML
+   ============================================================ */
+
+const CACHE_NAME   = 'hidrosmart-v2';
+const OFFLINE_URL  = './index.html';
+
+const PRECACHE = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
 ];
 
-// Instalar e cachear assets essenciais
+/* ---------- INSTALL ---------- */
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE))
+      .catch(err => console.warn('[SW] precache parcial:', err))
   );
   self.skipWaiting();
 });
 
-// Limpar caches antigos na ativação
+/* ---------- ACTIVATE ---------- */
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+        keys
+          .filter(k => k !== CACHE_NAME)
+          .map(k => caches.delete(k))
       )
     )
   );
   self.clients.claim();
 });
 
-// Estratégia: Cache First com fallback para rede
+/* ---------- FETCH ---------- */
 self.addEventListener('fetch', event => {
-  // Ignorar requisições não-GET e extensões do browser
-  if (event.request.method !== 'GET') return;
-  if (event.request.url.startsWith('chrome-extension://')) return;
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Ignora requisições cross-origin (fontes Google, etc.)
+  if (url.origin !== location.origin) return;
+
+  // Ignora métodos que não sejam GET
+  if (request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-
-      return fetch(event.request)
-        .then(response => {
-          // Cachear apenas respostas válidas de mesma origem
-          if (
-            response.ok &&
-            response.type === 'basic' &&
-            !event.request.url.includes('chrome-extension')
-          ) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-          }
-          return response;
-        })
-        .catch(() => {
-          // Offline fallback: retornar index.html para navegação
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-    })
+    // Estratégia: Network-first → Cache fallback
+    fetch(request)
+      .then(response => {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+        }
+        return response;
+      })
+      .catch(() =>
+        caches.match(request)
+          .then(cached => cached || caches.match(OFFLINE_URL))
+      )
   );
+});
+
+/* ---------- MESSAGE ---------- */
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
