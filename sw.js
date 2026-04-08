@@ -1,108 +1,60 @@
-/* ============================================================
-   HidroSmart — Service Worker v2.1
-   Estratégia: Cache-First para assets, Network-First para dados
-   ============================================================ */
-
-const CACHE_NAME    = 'hidrosmart-v2.1';
-const OFFLINE_URL   = './';
-
-// Assets que são cacheados imediatamente no install
-const PRECACHE_ASSETS = [
+// HidroSmart v2.0 — Service Worker
+const CACHE_NAME = 'hidrosmart-v2.0';
+const ASSETS = [
   './',
   './index.html',
-  './manifest.json',
+  './manifest.json'
 ];
 
-// ── Install: pré-cacheia os assets essenciais ──
+// Instalar e cachear assets essenciais
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
+  self.skipWaiting();
 });
 
-// ── Activate: remove caches antigos ──
+// Limpar caches antigos na ativação
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames =>
+    caches.keys().then(keys =>
       Promise.all(
-        cacheNames
-          .filter(name => name !== CACHE_NAME)
-          .map(name => caches.delete(name))
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
       )
-    ).then(() => self.clients.claim())
+    )
   );
+  self.clients.claim();
 });
 
-// ── Fetch: Cache-First com fallback de rede ──
+// Estratégia: Cache First com fallback para rede
 self.addEventListener('fetch', event => {
-  // Ignora requisições não-GET e APIs externas
+  // Ignorar requisições não-GET e extensões do browser
   if (event.request.method !== 'GET') return;
+  if (event.request.url.startsWith('chrome-extension://')) return;
 
-  const url = new URL(event.request.url);
-
-  // Passa direto requisições para APIs externas (Anthropic, GitHub, etc.)
-  if (
-    url.hostname !== self.location.hostname &&
-    url.hostname !== 'localhost' &&
-    !url.hostname.endsWith('.github.io')
-  ) {
-    // Para APIs externas: tenta rede, sem cache
-    event.respondWith(
-      fetch(event.request).catch(() => {
-        // Nada a fazer offline para APIs
-        return new Response(JSON.stringify({ error: 'offline' }), {
-          status: 503,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      })
-    );
-    return;
-  }
-
-  // Para assets locais: Cache-First, fallback rede, fallback offline
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      if (cachedResponse) {
-        // Atualiza cache em background (stale-while-revalidate)
-        fetch(event.request)
-          .then(networkResponse => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then(cache => {
-                cache.put(event.request, networkResponse.clone());
-              });
-            }
-          })
-          .catch(() => {}); // Silencia erros de rede no background
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
 
-        return cachedResponse;
-      }
-
-      // Não está no cache: busca na rede e cacheia
       return fetch(event.request)
-        .then(networkResponse => {
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            caches.open(CACHE_NAME).then(cache => {
-              cache.put(event.request, networkResponse.clone());
-            });
+        .then(response => {
+          // Cachear apenas respostas válidas de mesma origem
+          if (
+            response.ok &&
+            response.type === 'basic' &&
+            !event.request.url.includes('chrome-extension')
+          ) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
           }
-          return networkResponse;
+          return response;
         })
         .catch(() => {
-          // Fallback para a página principal se offline
-          return caches.match(OFFLINE_URL);
+          // Offline fallback: retornar index.html para navegação
+          if (event.request.mode === 'navigate') {
+            return caches.match('./index.html');
+          }
         });
     })
   );
-});
-
-// ── Mensagens do cliente (ex: forçar atualização) ──
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  if (event.data && event.data.type === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: CACHE_NAME });
-  }
 });

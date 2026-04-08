@@ -1,105 +1,72 @@
 {
-  "name": "HidroSmart",
+  "name": "HidroSmart - Infra Mobile",
   "short_name": "HidroSmart",
-  "description": "Gestão inteligente de água para condomínios",
-  "start_url": "./",
-  "scope": "./",
+  "description": "Gestão inteligente de infraestrutura hídrica de condomínios",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait-primary",
+  "background_color": "#005EC0",
   "theme_color": "#005EC0",
-  "background_color": "#eef5fc",
   "lang": "pt-BR",
-  "dir": "ltr",
-  "categories": ["utilities", "productivity"],
-
+  "scope": "./",
   "icons": [
     {
-      "src": "icons/icon-72.png",
+      "src": "icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-96.png",
+      "src": "icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-128.png",
+      "src": "icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-144.png",
+      "src": "icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-152.png",
+      "src": "icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-384.png",
+      "src": "icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
-      "src": "icons/icon-512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     }
   ],
-
   "screenshots": [
     {
-      "src": "screenshots/desktop.png",
-      "sizes": "1280x800",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Dashboard HidroSmart"
-    },
-    {
-      "src": "screenshots/mobile.png",
+      "src": "screenshots/screen1.png",
       "sizes": "390x844",
       "type": "image/png",
-      "form_factor": "narrow",
-      "label": "HidroSmart no celular"
+      "form_factor": "narrow"
     }
   ],
-
-  "shortcuts": [
-    {
-      "name": "Novo lançamento",
-      "short_name": "Lançamento",
-      "description": "Registrar nova leitura do hidrômetro",
-      "url": "./?shortcut=lancamento",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Dashboard",
-      "short_name": "Dashboard",
-      "description": "Ver painel principal",
-      "url": "./?shortcut=dashboard",
-      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
-    }
-  ],
-
-  "prefer_related_applications": false,
-
-  "related_applications": [],
-
-  "display_override": ["standalone", "minimal-ui", "browser"]
+  "categories": ["utilities", "productivity"],
+  "prefer_related_applications": false
 }
