@@ -1,113 +1,117 @@
-# 💧 HidroSmart
+# 💧 HidroSmart v2.0
 
-**Controle de consumo de água para condomínios** — PWA (Progressive Web App) completa, instalável em mobile, desktop e web, sem servidor backend.
+Controle de consumo de água para condomínios — PWA + Desktop.
+
+## 🌐 Acesso Web (GitHub Pages)
+
+Após subir no GitHub e habilitar Pages:
+```
+https://<seu-usuario>.github.io/<nome-do-repo>/
+```
+
+- Funciona em qualquer navegador moderno
+- Instalável como PWA no Android, iOS e Chrome Desktop
+- Funciona offline (Service Worker incluso)
 
 ---
 
-## 🚀 Deploy rápido
+## 📱 Instalação Mobile
 
-### GitHub Pages (gratuito)
+### Android
+1. Acesse a URL pelo Chrome
+2. Toque em **"Adicionar à tela inicial"** (banner ou menu ⋮)
+3. O app abre em tela cheia como app nativo
 
+### iOS (Safari)
+1. Acesse a URL pelo Safari
+2. Toque em **Compartilhar** → **Adicionar à Tela de Início**
+3. O app abre standalone
+
+---
+
+## 💻 Desktop (Electron)
+
+### Pré-requisitos
+- Node.js 18+ → https://nodejs.org
+- Python 3 + Pillow (para gerar ícones)
+
+### Instalar e rodar localmente
 ```bash
-# 1. Clone ou faça upload dos arquivos para um repositório público
-git init
-git add .
-git commit -m "HidroSmart v2.0"
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/hidrosmart.git
-git push -u origin main
+# Gerar ícones
+pip install Pillow
+python generate_icons.py
 
-# 2. No GitHub: Settings → Pages → Source: "Deploy from a branch" → main → / (root)
+# Instalar dependências
+npm install
+
+# Rodar em modo dev
+npm start
 ```
 
-A URL ficará: `https://SEU_USUARIO.github.io/hidrosmart/`
-
-### Vercel (gratuito, recomendado para domínio customizado)
+### Gerar instaladores
 
 ```bash
-npm i -g vercel
-vercel --prod
+# Windows (.exe instalador + portable)
+npm run build:win
+
+# Linux (.AppImage + .deb)
+npm run build:linux
+
+# macOS (.dmg)
+npm run build:mac
+
+# Todos de uma vez (precisa de macOS para o .dmg)
+npm run build:all
 ```
 
-Ou conecte o repositório em [vercel.com](https://vercel.com) e o deploy é automático.
+Os instaladores ficam em `./dist/`.
+
+---
+
+## 🚀 Deploy automático (GitHub Actions)
+
+O workflow `.github/workflows/deploy.yml` faz:
+
+1. **Push para `main`** → deploya automaticamente no GitHub Pages
+2. **Tag `v*`** (ex: `v2.1.0`) → gera instaladores para Windows, Linux e macOS e cria um GitHub Release
+
+```bash
+# Criar release com instaladores
+git tag v2.1.0
+git push origin v2.1.0
+```
 
 ---
 
 ## 📁 Estrutura de arquivos
 
 ```
-hidrosmart/
-├── index.html          # App completa (single-file PWA)
-├── manifest.json       # Manifesto PWA (nome, ícones, cores)
-├── sw.js               # Service Worker (cache offline)
-├── icon-192.png        # Ícone 192×192 px
-├── icon-512.png        # Ícone 512×512 px
-├── browserconfig.xml   # Configuração para Windows/Edge
-├── vercel.json         # Config de deploy Vercel
-├── .nojekyll           # Desativa Jekyll no GitHub Pages
-└── README.md           # Este arquivo
+├── index.html          ← App principal (PWA single-file)
+├── sw.js               ← Service Worker externo
+├── manifest.json       ← PWA Manifest
+├── browserconfig.xml   ← Windows/Edge tile
+├── favicon.ico         ← Favicon (gerado)
+├── apple-touch-icon.png← iOS icon (gerado)
+├── main.js             ← Electron entry point
+├── package.json        ← Configuração Electron + builder
+├── generate_icons.py   ← Gerador de ícones e splash screens
+├── icons/              ← Ícones gerados (72px → 512px)
+├── splash/             ← Splash screens iOS (gerados)
+└── .github/
+    └── workflows/
+        └── deploy.yml  ← CI/CD GitHub Actions
 ```
 
 ---
 
-## 📱 Instalação como app (PWA)
+## ⚙️ Habilitar GitHub Pages
 
-### Android / Chrome
-1. Abra a URL no Chrome
-2. Toque nos **⋮** (três pontos) → **"Adicionar à tela inicial"**
-3. O app aparece na tela inicial como app nativo
-
-### iPhone / Safari
-1. Abra a URL no Safari
-2. Toque em **Compartilhar** (ícone de caixa com seta) → **"Adicionar à Tela de Início"**
-3. Confirme o nome e toque em **Adicionar**
-
-### Desktop (Chrome / Edge)
-1. Abra a URL no navegador
-2. Clique no ícone de **instalação** (⊕) na barra de endereço
-3. Ou: menu ⋮ → **"Instalar HidroSmart"**
-
----
-
-## ✨ Funcionalidades
-
-| Módulo | Descrição |
-|--------|-----------|
-| 🏠 Dashboard | Visão geral com KPIs, tanques, histórico e alertas |
-| 💧 Ciclos de leitura | Registro e acompanhamento por período |
-| 📊 Análise mensal | Gráficos de consumo, tendências e projeções |
-| 🔧 Manutenção | Controle de equipamentos e histórico de serviços |
-| 📋 Ocorrências | Registro e acompanhamento de problemas |
-| 💰 Faturamento | Cálculo de tarifas e geração de boletos |
-| 🛡️ Saúde do sistema | Score geral e alertas inteligentes |
-| 🌐 IoT | Monitoramento de sensores em tempo real |
-| 🧮 Calculadoras | Hidráulica, vazão, HMT, bomba, tubulação |
-| ⚙️ Configurações | Multi-instalação, tarifas, dark mode |
-
----
-
-## 🔧 Tecnologias
-
-- **HTML5 / CSS3 / JavaScript** — zero dependências externas
-- **PWA** — instalável, funciona offline via Service Worker
-- **LocalStorage** — dados persistidos localmente no dispositivo
-- **Canvas API** — gráficos renderizados nativamente
-- **Web Fonts** — Outfit, Inter, JetBrains Mono (Google Fonts)
-
----
-
-## 🌙 Dark Mode
-
-O app detecta automaticamente o tema do sistema (claro/escuro) e também permite alternar manualmente pelo botão na barra superior.
-
----
-
-## 📦 Atualização do app
-
-Quando uma nova versão for publicada, o Service Worker detecta automaticamente e atualiza o cache na próxima visita. Nenhuma ação manual necessária.
+1. Vá em **Settings** → **Pages**
+2. Source: **GitHub Actions**
+3. Salvar
 
 ---
 
 ## 📄 Licença
 
-Uso interno / privado. Todos os direitos reservados.
+MIT

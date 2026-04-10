@@ -1,0 +1,68 @@
+{
+  "name": "hidrosmart",
+  "version": "2.0.0",
+  "description": "Controle de consumo de água para condomínios",
+  "author": "HidroSmart",
+  "license": "MIT",
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "start":     "electron .",
+    "dev":       "electron . --inspect",
+    "build:win": "electron-builder --win --x64",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder -mwl",
+    "icons":     "python generate_icons.py"
+  },
+  "devDependencies": {
+    "electron":         "^29.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "br.app.hidrosmart",
+    "productName": "HidroSmart",
+    "copyright": "Copyright © 2024 HidroSmart",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "sw.js",
+      "manifest.json",
+      "browserconfig.xml",
+      "favicon.ico",
+      "apple-touch-icon.png",
+      "icons/**",
+      "splash/**"
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis",     "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "icon": "icons/icon-512.png"
+    },
+    "nsis": {
+      "oneClick":              false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon":         "icons/icon-512.png",
+      "uninstallerIcon":       "icons/icon-512.png",
+      "installerHeaderIcon":   "icons/icon-512.png",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName":          "HidroSmart"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon":   "icons/icon-512.png",
+      "category": "public.app-category.utilities"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon":   "icons/",
+      "category": "Utility"
+    }
+  }
+}
