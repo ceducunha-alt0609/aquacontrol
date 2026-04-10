@@ -8697,8 +8697,8 @@ atualizarBadgeDias();
 // ── Splash otimizado: esconde assim que o app estiver pronto ──
 (function(){
   const _splashStart = Date.now();
-  const MIN_SPLASH = 800;   // mínimo para não piscar
-  const MAX_SPLASH = 2000;  // máximo — nunca trava mais que isso
+  const MIN_SPLASH = 1800;  // mínimo para não piscar
+  const MAX_SPLASH = 3000;  // máximo — nunca trava mais que isso
   function hideSplash(){
     const s = document.getElementById('app-splash');
     if(!s || s.classList.contains('hidden')) return;
