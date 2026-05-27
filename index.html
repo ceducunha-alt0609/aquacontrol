@@ -5310,14 +5310,58 @@ function saveAncora(){
   c.leituraAnterior={data,leitura:leit};markDirty();render();showToast('Leitura anterior salva!');
 }
 function getAncoraParaCiclo(ai){
-  var c=S.ciclos[ai];if(!c)return null;
-  if(c.leituraAnterior&&c.leituraAnterior.leitura>0)
-    return{leitura:c.leituraAnterior.leitura,data:c.leituraAnterior.data};
-  if(ai>0){
-    var prev=S.ciclos[ai-1];if(!prev)return null;
-    if(prev._ultimaLeitura)return{leitura:prev._ultimaLeitura.leitura,data:prev._ultimaLeitura.data};
-    if(prev.lancamentos.length)return[...prev.lancamentos].sort(function(a,b){return a.data.localeCompare(b.data);}).slice(-1)[0];
+  var c=S.ciclos[ai];
+  if(!c)return null;
+
+  // âncora manual do próprio ciclo
+  if(c.leituraAnterior && c.leituraAnterior.leitura>0){
+    return {
+      leitura:c.leituraAnterior.leitura,
+      data:c.leituraAnterior.data
+    };
   }
+
+  // buscar última leitura válida do ciclo anterior
+  if(ai>0){
+    var prev=S.ciclos[ai-1];
+    if(!prev)return null;
+
+    // sempre recalcula pela lista atual para evitar leituras excluídas
+    var validos=(prev.lancamentos||[])
+      .filter(l=>l && l.data && typeof l.leitura==='number')
+      .sort(function(a,b){
+        return a.data.localeCompare(b.data);
+      });
+
+    if(validos.length){
+      var ult=validos[validos.length-1];
+
+      // evita duplicar a mesma data dentro do novo ciclo
+      var jaExiste=(c.lancamentos||[]).some(function(l){
+        return l.data===ult.data;
+      });
+
+      if(!jaExiste){
+        return {
+          leitura:ult.leitura,
+          data:ult.data,
+          obs:'leit. ciclo ant.'
+        };
+      }
+    }
+
+    // fallback legado somente se ainda existir e for diferente
+    if(prev._ultimaLeitura &&
+       !(c.lancamentos||[]).some(function(l){
+         return l.data===prev._ultimaLeitura.data;
+       })){
+      return {
+        leitura:prev._ultimaLeitura.leitura,
+        data:prev._ultimaLeitura.data
+      };
+    }
+  }
+
   return null;
 }
 function getConsumoTotal(c,ancora){
@@ -5717,7 +5761,12 @@ function addLanc(){
   ensureCiclo();const c=getCiclo(curIdx);
   if(!c||c.termino){showToast('Ciclo encerrado.','warn');return;}
   const exists=c.lancamentos.find(l=>l.data===data);
-  if(exists){if(!confirm('Substituir lançamento de '+fmtFull(data)+'?'))return;c.lancamentos=c.lancamentos.filter(l=>l.data!==data);}
+  if(exists){if(!confirm('Substituir lançamento de '+fmtFull(data)+'?'))return;c.lancamentos=c.lancamentos.filter(l=>l.data!==data);
+  if(c._ultimaLeitura){
+    const ord=[...(c.lancamentos||[])].sort((a,b)=>a.data.localeCompare(b.data));
+    c._ultimaLeitura=ord.length?ord[ord.length-1]:null;
+  }
+}
   c.lancamentos.push({data,leitura,obs});c.lancamentos.sort((a,b)=>a.data.localeCompare(b.data));
   markDirty();document.getElementById('in-leit').value='';const _clearObs=document.getElementById('in-obs'); if(_clearObs)_clearObs.value='';const _lp=document.getElementById('leit-preview');if(_lp)_lp.style.display='none';
   showToast('Lançamento adicionado!');render();
