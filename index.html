@@ -1406,6 +1406,59 @@ tbody tr:hover{background:linear-gradient(90deg,rgba(0,82,181,.08),rgba(106,175,
 </style>
 <!-- AQUACONTROL_PREMIUM_GLASS_UX_END -->
 
+
+<style id="toast-centralizado-fix">
+/* Toast/aviso centralizado: aparece no meio da tela, independente da rolagem ou da guia */
+#toast.toast{
+  position:fixed !important;
+  top:50% !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:auto !important;
+  min-width:min(320px, calc(100vw - 40px)) !important;
+  max-width:min(520px, calc(100vw - 40px)) !important;
+  margin:0 !important;
+  z-index:99999 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  padding:16px 22px !important;
+  border-radius:18px !important;
+  box-shadow:0 22px 70px rgba(0,20,60,.34), 0 2px 0 rgba(255,255,255,.10) inset !important;
+  transform:translate(-50%, -44%) scale(.96) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:transform .32s var(--ease-spring), opacity .24s ease !important;
+}
+#toast.toast.show{
+  transform:translate(-50%, -50%) scale(1) !important;
+  opacity:1 !important;
+}
+#toast.toast .toast-prog{
+  position:absolute !important;
+  left:0 !important;
+  right:auto !important;
+  bottom:0 !important;
+  height:3px !important;
+  border-radius:0 0 18px 18px !important;
+}
+@media(max-width:768px){
+  #toast.toast,
+  #toast.toast.show{
+    top:50% !important;
+    left:50% !important;
+    right:auto !important;
+    bottom:auto !important;
+  }
+}
+</style>
+
+
+<style id="leituras-sem-observacao-css">
+#in-obs,#edit-obs{display:none!important}
+</style>
 </head>
 <body>
 <div id="app-splash">
@@ -1986,7 +2039,6 @@ o consumo acumulado do período.">?</span>
  <div class="fg"><label>Leitura do hidrômetro (m³)</label><input type="text" inputmode="decimal" class="numero-livre" id="in-leit" placeholder="50982.00" step="0.01" min="0" oninput="calcLeitPreview()"></div>
  </div>
  <div class="fg-row-2">
- <div class="fg"><label>Observação <span style="font-weight:400;color:var(--text3)">(opcional)</span></label><input type="text" id="in-obs" placeholder="Ex: leitura presencial, após manutenção..."></div>
  <div class="fg"><label>&nbsp;</label><div style="display:flex;gap:8px;align-items:stretch">
  <button class="btn btn-p" id="btn-add" onclick="addLanc()" style="white-space:nowrap;flex:1">+ Adicionar leitura</button>
  <button class="btn" id="btn-mic-lanc" onclick="micLanc()" title="Ditar valor da leitura" style="padding:0 12px;flex-shrink:0;border-color:var(--border2)" aria-label="Microfone">
@@ -4713,7 +4765,6 @@ create policy "open" on infra_sync for all using (true) with check (true);</code
  <div style="display:grid;gap:12px">
  <div class="fg"><label>Data</label><input type="date" id="edit-data" oninput="calcEditPreview()"></div>
  <div class="fg"><label>Leitura do hidrômetro (m³)</label><input type="text" inputmode="decimal" class="numero-livre" id="edit-leit" step="0.01" min="0" placeholder="Ex: 51549.00" oninput="calcEditPreview()"></div>
- <div class="fg"><label>Observação <span style="font-weight:400;color:var(--text3)">(opcional)</span></label><input type="text" id="edit-obs" placeholder="Ex: leitura presencial"></div>
  </div>
  <div class="leit-preview" id="edit-preview">
  <span class="lp-main" id="ep-cons">—</span>
@@ -5193,11 +5244,11 @@ function exportarCSV(){
   if(!c||!c.lancamentos.length){showToast('Sem lançamentos para exportar.','warn');return;}
   const sorted=[...c.lancamentos].sort((a,b)=>a.data.localeCompare(b.data));
   const leiBase=anc?anc.leitura:0;
-  const rows=[['Data','Leitura (m³)','Consumo do dia (m³)','Observação']];
+  const rows=[['Data','Leitura (m³)','Consumo do dia (m³)']];
   let prev2=leiBase;
   sorted.forEach(l=>{
     const consumoDia=l.leitura-prev2;
-    rows.push([l.data,l.leitura.toFixed(2),consumoDia>0?consumoDia.toFixed(2):'0.00',l.obs||'']);
+    rows.push([l.data,l.leitura.toFixed(2),consumoDia>0?consumoDia.toFixed(2):'0.00']);
     prev2=l.leitura;
   });
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
@@ -5660,7 +5711,7 @@ function calcLeitPreview(){
 function addLanc(){
   const data=document.getElementById('in-data').value;
   const leitura=parseFloat(document.getElementById('in-leit').value);
-  const obs=document.getElementById('in-obs').value.trim();
+  const _inObs=document.getElementById('in-obs'); const obs=_inObs?_inObs.value.trim():'';
   if(!data){showToast('Informe a data.','warn');return;}
   if(isNaN(leitura)||leitura<0){showToast('Informe a leitura.','warn');return;}
   ensureCiclo();const c=getCiclo(curIdx);
@@ -5668,7 +5719,7 @@ function addLanc(){
   const exists=c.lancamentos.find(l=>l.data===data);
   if(exists){if(!confirm('Substituir lançamento de '+fmtFull(data)+'?'))return;c.lancamentos=c.lancamentos.filter(l=>l.data!==data);}
   c.lancamentos.push({data,leitura,obs});c.lancamentos.sort((a,b)=>a.data.localeCompare(b.data));
-  markDirty();document.getElementById('in-leit').value='';document.getElementById('in-obs').value='';const _lp=document.getElementById('leit-preview');if(_lp)_lp.style.display='none';
+  markDirty();document.getElementById('in-leit').value='';const _clearObs=document.getElementById('in-obs'); if(_clearObs)_clearObs.value='';const _lp=document.getElementById('leit-preview');if(_lp)_lp.style.display='none';
   showToast('Lançamento adicionado!');render();
   setTimeout(()=>verificarLimiar('lancamento'),300);
 }
@@ -5687,13 +5738,13 @@ function removeLanc(data){
 let _editOrig=null;
 function openEdit(data){
   const c=getCiclo(curIdx);if(!c)return;const l=c.lancamentos.find(l=>l.data===data);if(!l)return;
-  _editOrig=data;document.getElementById('edit-data').value=l.data;document.getElementById('edit-leit').value=l.leitura;document.getElementById('edit-obs').value=l.obs||'';
+  _editOrig=data;document.getElementById('edit-data').value=l.data;document.getElementById('edit-leit').value=l.leitura;const _editObs=document.getElementById('edit-obs'); if(_editObs)_editObs.value=l.obs||'';
   const m=document.getElementById('edit-modal');m.classList.add('open');m.onclick=e=>{if(e.target===m)closeEdit();};
 }
 function closeEdit(){document.getElementById('edit-modal').classList.remove('open');_editOrig=null;const p=document.getElementById('edit-preview');if(p)p.style.display='none';}
 function saveEdit(){
   const c=getCiclo(curIdx);if(!c||!_editOrig)return;
-  const nd=document.getElementById('edit-data').value,nl=parseFloat(document.getElementById('edit-leit').value),no=document.getElementById('edit-obs').value.trim();
+  const nd=document.getElementById('edit-data').value,nl=parseFloat(document.getElementById('edit-leit').value);const no='';
   if(!nd||isNaN(nl)||nl<0){showToast('Dados inválidos.','warn');return;}
   const conf=c.lancamentos.find(l=>l.data===nd&&l.data!==_editOrig);
   if(conf){if(!confirm('Substituir '+fmtFull(nd)+'?'))return;c.lancamentos=c.lancamentos.filter(l=>l.data!==nd);}
@@ -5810,11 +5861,11 @@ function exportarCSVCiclo(cicloId){
     (ai>0?([...S.ciclos[ai-1].lancamentos].sort((a,b)=>a.data.localeCompare(b.data)).slice(-1)[0]||null):null);
   const leiBase=ancObj?ancObj.leitura:0;
   const sorted=[...c.lancamentos].sort((a,b)=>a.data.localeCompare(b.data));
-  const rows=[['Data','Leitura (m³)','Consumo do dia (m³)','Observação']];
+  const rows=[['Data','Leitura (m³)','Consumo do dia (m³)']];
   let prevLei=leiBase;
   sorted.forEach(l=>{
     const d=Math.max(0,l.leitura-prevLei);
-    rows.push([l.data,l.leitura.toFixed(2),d.toFixed(2),l.obs||'']);
+    rows.push([l.data,l.leitura.toFixed(2),d.toFixed(2)]);
     prevLei=l.leitura;
   });
   const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
@@ -6720,7 +6771,11 @@ function renderTable(){
     return`<tr><td style="font-family:var(--mono)">${fmtFull(l.data)}</td><td style="font-family:var(--mono);font-weight:700">${Math.round(l.leitura)}</td>
       <td>${sparkCell}</td>
       <td style="color:var(--text2);font-size:12px">${l.obs||'—'}</td>
-      <td><button class="btn btn-sm" style="color:var(--blue);border-color:transparent;background:none;padding:0 8px" onclick="openEdit('${l.data}')" ${locked?'disabled':''}><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button></td>
+      <td style="display:flex;gap:6px;align-items:center;justify-content:center">
+        <button class="btn btn-sm" style="color:var(--blue);border-color:transparent;background:none;padding:0 8px" onclick="openEdit('${l.data}')" ${locked?'disabled':''} title="Editar lançamento">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        </button>
+      </td>
       <td><button class="btn btn-sm btn-del" onclick="removeLanc('${l.data}')" ${locked?'disabled':''}>✕</button></td></tr>`;
   }).join('');
   tbody.innerHTML=rows;
@@ -7379,8 +7434,8 @@ function buildExcelData(cicloId){
     const ai=S.ciclos.indexOf(c);const anc=ai>0?([...S.ciclos[ai-1].lancamentos].sort((a,b)=>a.data.localeCompare(b.data)).slice(-1)[0]||null):null;const a2=c.leituraAnterior&&c.leituraAnterior.leitura>0?{leitura:c.leituraAnterior.leitura}:anc;
     const cons=getConsumoTotal(c,a2);const dias=c.termino?diasCiclo(c):diasDecorridos(c);
     const lans=a2?[a2,...c.lancamentos]:c.lancamentos;const cd=getConsumoDiario(lans);
-    const rows=[['Data','Leitura (m³)','Consumo diário (m³)','Observação']];
-    c.lancamentos.forEach(l=>rows.push([fmtFull(l.data),l.leitura,cd[l.data]!==undefined?parseFloat(cd[l.data].toFixed(3)):'',l.obs||'']));
+    const rows=[['Data','Leitura (m³)','Consumo diário (m³)']];
+    c.lancamentos.forEach(l=>rows.push([fmtFull(l.data),l.leitura,cd[l.data]!==undefined?parseFloat(cd[l.data].toFixed(3)):'']));
     rows.push([]);rows.push(['Resumo','']);rows.push(['Consumo total',cons.toFixed(3)+' m³']);
     rows.push(['Duração',dias+' dias']);rows.push(['Média diária',(cons/Math.max(1,dias)).toFixed(3)+' m³/dia']);
     if(meta>0)rows.push(['% do limite',(cons/meta*100).toFixed(1)+'%']);
@@ -7414,7 +7469,7 @@ function buildPDFHTML(cicloId){
     const lans=a2?[a2,...c.lancamentos]:c.lancamentos;const cd=getConsumoDiario(lans);
     const refFim=c.termino||todayKey();const chartLabels=[],chartData=[];let cur=c.inicio;
     while(cur<=refFim){chartLabels.push(fmtShort(cur));chartData.push(cd[cur]!==undefined?parseFloat(cd[cur].toFixed(3)):0);const dt=new Date(cur+'T12:00:00');dt.setDate(dt.getDate()+1);cur=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
-    const tableRows=c.lancamentos.map(l=>{const c2=cd[l.data];return`<tr><td>${fmtFull(l.data)}</td><td>${l.leitura.toFixed(2)}</td><td>${c2!==undefined?c2.toFixed(3):'—'}</td><td>${l.obs||'—'}</td></tr>`;}).join('');
+    const tableRows=c.lancamentos.map(l=>{const c2=cd[l.data];return`<tr><td>${fmtFull(l.data)}</td><td>${l.leitura.toFixed(2)}</td><td>${c2!==undefined?c2.toFixed(3):'—'}</td></tr>`;}).join('');
     const chartId='c'+c.id.replace(/[^a-z0-9]/gi,'');
     const contaPdf=S.contas.find(ct=>ct.cicloId===c.id);
     const tApdf=contaPdf?contaPdf.tarifa:(S.config.tarifa||0);
@@ -7423,12 +7478,61 @@ function buildPDFHTML(cicloId){
     const custoPdf=contaPdf&&contaPdf.total>0?contaPdf.total:(tApdf>0&&cons>0?parseFloat((cons*(tApdf+tEpdf)*(1+tRpdf/100)).toFixed(2)):0);
     return{c,cons,dias,med,tableRows,chartLabels,chartData,chartId,custoPdf};
   });
-  return`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#0d1829;background:#fff}.page{max-width:800px;margin:0 auto;padding:40px}.hdr{border-bottom:3px solid #0062cc;padding-bottom:16px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end}.brand{font-size:22px;font-weight:800;color:#0062cc}.h2{font-size:14px;font-weight:700;color:#0d1829;margin:22px 0 10px;padding-bottom:5px;border-bottom:1px solid #d8e8f5}.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.mc{background:#f0f6ff;border-radius:8px;padding:11px 13px}.mc-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8fa3bc;margin-bottom:5px}.mc-v{font-size:17px;font-weight:700}.cc{height:160px;margin:14px 0;position:relative}table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}th{background:#f0f6ff;padding:7px 10px;text-align:left;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#4a5f7a;border-bottom:1px solid #d8e8f5}td{padding:7px 10px;border-bottom:1px solid #eef4fb}.bill{border:1px solid #d8e8f5;border-radius:9px;padding:16px;margin-top:14px;background:#f7fbff}.bt{font-size:13px;font-weight:700;color:#0062cc;margin-bottom:11px}.bg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.bl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#8fa3bc;margin-bottom:2px;font-weight:700}.bv{font-size:13px;font-weight:700}.due{margin-top:11px;background:#0062cc;color:#fff;display:inline-block;padding:6px 14px;border-radius:6px;font-weight:700;font-size:11px}.foot{margin-top:38px;padding-top:11px;border-top:1px solid #d8e8f5;font-size:10px;color:#8fa3bc;display:flex;justify-content:space-between}@media print{body{background:#fff}}</style>\x3cscript src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"><\/script></head><body><div class="page">
+  return`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#0d1829;background:#fff}.page{max-width:800px;margin:0 auto;padding:40px}.hdr{border-bottom:3px solid #0062cc;padding-bottom:16px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end}.brand{font-size:22px;font-weight:800;color:#0062cc}.h2{font-size:14px;font-weight:700;color:#0d1829;margin:22px 0 10px;padding-bottom:5px;border-bottom:1px solid #d8e8f5}.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.mc{background:#f0f6ff;border-radius:8px;padding:11px 13px}.mc-l{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8fa3bc;margin-bottom:5px}.mc-v{font-size:17px;font-weight:700}.cc{height:160px;margin:14px 0;position:relative}table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}th{background:#f0f6ff;padding:7px 10px;text-align:left;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#4a5f7a;border-bottom:1px solid #d8e8f5}td{padding:7px 10px;border-bottom:1px solid #eef4fb}.bill{border:1px solid #d8e8f5;border-radius:9px;padding:16px;margin-top:14px;background:#f7fbff}.bt{font-size:13px;font-weight:700;color:#0062cc;margin-bottom:11px}.bg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.bl{font-size:9px;text-transform:uppercase;letter-spacing:.07em;color:#8fa3bc;margin-bottom:2px;font-weight:700}.bv{font-size:13px;font-weight:700}.due{margin-top:11px;background:#0062cc;color:#fff;display:inline-block;padding:6px 14px;border-radius:6px;font-weight:700;font-size:11px}.foot{margin-top:38px;padding-top:11px;border-top:1px solid #d8e8f5;font-size:10px;color:#8fa3bc;display:flex;justify-content:space-between}@media print{body{background:#fff}}</style>\x3cscript src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"><\/script>
+<style id="toast-centralizado-fix">
+/* Toast/aviso centralizado: aparece no meio da tela, independente da rolagem ou da guia */
+#toast.toast{
+  position:fixed !important;
+  top:50% !important;
+  left:50% !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:auto !important;
+  min-width:min(320px, calc(100vw - 40px)) !important;
+  max-width:min(520px, calc(100vw - 40px)) !important;
+  margin:0 !important;
+  z-index:99999 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  padding:16px 22px !important;
+  border-radius:18px !important;
+  box-shadow:0 22px 70px rgba(0,20,60,.34), 0 2px 0 rgba(255,255,255,.10) inset !important;
+  transform:translate(-50%, -44%) scale(.96) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:transform .32s var(--ease-spring), opacity .24s ease !important;
+}
+#toast.toast.show{
+  transform:translate(-50%, -50%) scale(1) !important;
+  opacity:1 !important;
+}
+#toast.toast .toast-prog{
+  position:absolute !important;
+  left:0 !important;
+  right:auto !important;
+  bottom:0 !important;
+  height:3px !important;
+  border-radius:0 0 18px 18px !important;
+}
+@media(max-width:768px){
+  #toast.toast,
+  #toast.toast.show{
+    top:50% !important;
+    left:50% !important;
+    right:auto !important;
+    bottom:auto !important;
+  }
+}
+</style>
+
+</head><body><div class="page">
  <div class="hdr"><div><div class="brand">💧 HidroSmart</div><div style="font-size:11px;color:#4a5f7a;margin-top:2px">${S.config.nome||'Condomínio'} · Relatório de Consumo</div></div><div style="text-align:right;font-size:11px;color:#4a5f7a">${new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'})}</div></div>
  ${rows.map(r=>`<div class="h2">Ciclo: ${fmtFullLong(r.c.inicio)} ${r.c.termino?'→ '+fmtFullLong(r.c.termino):'(em aberto)'}</div>
  <div class="mg"><div class="mc"><div class="mc-l">Consumo total</div><div class="mc-v">${r.cons.toFixed(1)} m³</div></div><div class="mc"><div class="mc-l">Duração</div><div class="mc-v">${r.dias} dias</div></div><div class="mc"><div class="mc-l">Média/dia</div><div class="mc-v">${r.med} m³</div></div><div class="mc"><div class="mc-l">${meta>0?'% do limite':'Custo'}</div><div class="mc-v">${meta>0?(r.cons/meta*100).toFixed(0)+'%':r.custoPdf>0?'R$ '+r.custoPdf.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'}</div></div></div>
  <div class="cc"><canvas id="${r.chartId}"></canvas></div>
- <table><thead><tr><th>Data</th><th>Leitura m³</th><th>Consumo diário m³</th><th>Observação</th></tr></thead><tbody>${r.tableRows}</tbody></table>
+ <table><thead><tr><th>Data</th><th>Leitura m³</th><th>Consumo diário m³</th></tr></thead><tbody>${r.tableRows}</tbody></table>
  ${conta&&conta.cicloId===r.c.id?`<div class="bill"><div class="bt">📋 Conta Gerada</div><div class="bg"><div><div class="bl">Leit. anterior</div><div class="bv">${conta.leiIni.toFixed(2)} m³</div></div><div><div class="bl">Leit. atual</div><div class="bv">${conta.leiFim.toFixed(2)} m³</div></div><div><div class="bl">Consumo</div><div class="bv">${conta.consumo.toFixed(1)} m³</div></div><div><div class="bl">Tarifa</div><div class="bv">${conta.tarifa>0?'R$ '+conta.tarifa.toFixed(2)+'/m³':'—'}</div></div><div><div class="bl">Total</div><div class="bv" style="font-size:17px;color:#0062cc">${conta.total>0?'R$ '+conta.total.toFixed(2):'—'}</div></div><div><div class="bl">Referência</div><div class="bv">${MESES[new Date(conta.vencimento+'T00:00:00').getMonth()]} ${new Date(conta.vencimento+'T00:00:00').getFullYear()}</div></div></div><div class="due">📅 Venc: ${fmtFull(conta.vencimento)}</div></div>`:''}
  `).join('')}
  <div class="foot"><span>HidroSmart · ${S.config.nome||'Condomínio'}</span><span>Meta: ${meta>0?meta+' m³':'—'} · Tarifa água: ${S.config.tarifa>0?'R$ '+S.config.tarifa.toFixed(3)+'/m³':'—'} · Esgoto: ${S.config.tarifaEsgoto>0?'R$ '+S.config.tarifaEsgoto.toFixed(3)+'/m³':'—'}</span></div>
@@ -10647,11 +10751,13 @@ function openConfirm(title,msg,okLabel,cb){
   _confirmCb=cb;
   document.getElementById('confirm-title').textContent=title;
   document.getElementById('confirm-msg').textContent=msg;
-  document.getElementById('confirm-ok-btn').textContent=okLabel||'Confirmar';
+  const okBtn=document.getElementById('confirm-ok-btn');
+  okBtn.textContent=okLabel||'Confirmar';
+  okBtn.onclick=doConfirm;
   document.getElementById('confirm-bg').classList.add('open');
 }
 function closeConfirm(){document.getElementById('confirm-bg').classList.remove('open');_confirmCb=null;}
-function doConfirm(){closeConfirm();if(_confirmCb)_confirmCb();}
+function doConfirm(){const cb=_confirmCb;closeConfirm();if(typeof cb==='function')cb();}
 function _saudacao(){
   const h=new Date().getHours();
   if(h<12)return'Bom dia';
