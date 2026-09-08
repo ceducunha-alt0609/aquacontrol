@@ -1,0 +1,70 @@
+name: Refino mobile painel Saude
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refine-mobile-health.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar refino mobile
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          marker = '/* mobile-health-refine-v1 */'
+          if marker not in html:
+              css = r'''
+          <style>
+          /* mobile-health-refine-v1 */
+          @media (max-width:600px){
+            #hs-hero{margin-top:-4px;padding:15px 16px 14px}
+            #hs-hero .hs-hero-inner{gap:9px}
+            #hs-hero .hs-score-block{width:100%;min-width:0}
+            #hs-hero .hs-score-eyebrow{margin-bottom:2px}
+            #hs-hero .hs-score-num{font-size:46px;line-height:.98}
+            #hs-hero .hs-score-num span{font-size:20px}
+            #hs-hero .hs-score-lbl{margin:2px 0 8px}
+            #hs-hero .hs-hero-badges{width:100%;display:flex;flex-wrap:nowrap;gap:4px;align-items:center}
+            #hs-hero .hs-badge{flex:0 1 auto;min-width:0;padding:3px 6px;font-size:9px;line-height:1.25;white-space:nowrap}
+            #hs-hero .hs-hero-right{width:100%;text-align:left;margin-top:1px}
+            #hs-hero .hs-hero-main-val{font-size:30px;line-height:1}
+            #hs-hero .hs-hero-main-lbl{margin-top:2px;margin-bottom:6px;opacity:.78}
+            #hs-hero .hs-hero-prog-wrap{width:100%;min-width:0}
+            #hs-hero .hs-hero-prog-meta{font-size:10.5px;opacity:.92;margin-bottom:4px}
+            #hs-hero .hs-hero-prog{height:8px;background:rgba(0,25,68,.46);border:1px solid rgba(255,255,255,.22);border-radius:5px}
+            #hs-hero .hs-hero-prog-fill{background:linear-gradient(90deg,#ffffff 0%,#8bdcff 100%);box-shadow:0 0 8px rgba(255,255,255,.42);border-radius:4px}
+            #hs-hero .hs-hero-prog-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b);box-shadow:none}
+            #hs-hero .hs-hero-prog-fill.crit{background:linear-gradient(90deg,#f87171,#ef4444);box-shadow:none}
+          }
+          </style>
+          '''
+              if '</head>' not in html:
+                  raise SystemExit('Nao encontrei </head> em index.html')
+              html = html.replace('</head>', css + '\n</head>', 1)
+              path.write_text(html, encoding='utf-8')
+
+      - name: Remover workflow temporario
+        run: rm -f .github/workflows/refine-mobile-health.yml
+
+      - name: Commit do refino
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/refine-mobile-health.yml
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao necessaria"
+            exit 0
+          fi
+          git commit -m "Refina painel Saude no mobile"
+          git push
