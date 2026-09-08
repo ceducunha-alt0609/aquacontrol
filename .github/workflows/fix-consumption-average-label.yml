@@ -1,0 +1,52 @@
+name: Corrige texto da media de consumo
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-consumption-average-label.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ajustar texto dinamico da media
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          # Substitui textos fixos mais provaveis por um span identificavel.
+          replacements=[
+            'Dentro da média de consumo','<span id="hs-consumption-average-label">Dentro da média de consumo</span>',
+            'dentro da média de consumo','<span id="hs-consumption-average-label">Dentro da média de consumo</span>'
+          ]
+          changed=False
+          for old,new in replacements:
+            if old in s and 'hs-consumption-average-label' not in s:
+              s=s.replace(old,new,1); changed=True; break
+          if 'hs-consumption-average-label' in s and 'hidrosmart-dynamic-average-label-v1' not in s:
+            script='''\n<script id="hidrosmart-dynamic-average-label-v1">\n(function(){\n  function n(v){return Number(String(v||'').replace(/[^0-9,.-]/g,'').replace(',','.'))||0}\n  function update(){\n    var el=document.getElementById('hs-consumption-average-label'); if(!el)return;\n    var cur=document.querySelector('#hs-hero [data-current-consumption], #hs-hero .hs-hero-cons-value, #hs-hero .hs-consumption-value');\n    var avg=document.querySelector('#hs-hero [data-average-consumption], #hs-hero .hs-average-value, #hs-hero .hs-consumption-average');\n    var cv=cur?n(cur.textContent):0, av=avg?n(avg.textContent):0;\n    if(!(av>0)) return;\n    var d=(cv-av)/av;\n    el.textContent=d<-0.05?'Abaixo da média de consumo':(d>0.05?'Acima da média de consumo':'Dentro da média de consumo');\n  }\n  update();\n  new MutationObserver(update).observe(document.body,{subtree:true,childList:true,characterData:true});\n  setInterval(update,1500);\n})();\n</script>\n'''
+            s=s.replace('</body>',script+'\n</body>',1); changed=True
+          if changed: p.write_text(s,encoding='utf-8')
+          else: print('Nenhuma alteracao aplicada')
+          PY
+
+      - name: Remover workflow temporario
+        run: rm -f .github/workflows/fix-consumption-average-label.yml
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/fix-consumption-average-label.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Corrige leitura dinamica da media de consumo"
+          git push
