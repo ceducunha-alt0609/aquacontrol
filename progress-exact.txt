@@ -1,0 +1,56 @@
+PATTERN: <[^>]*hs-hero-prog[^>]*>
+<div class="hs-hero-prog-wrap" id="hs-prog-wrap" style="display:none">
+<div class="hs-hero-prog-meta">
+<div class="hs-hero-prog">
+<div class="hs-hero-prog-fill" id="hs-prog-fill" style="width:0%">
+---
+PATTERN: <[^>]*hs-hero-prog-fill[^>]*>
+<div class="hs-hero-prog-fill" id="hs-prog-fill" style="width:0%">
+---
+PATTERN: <[^>]*hs-prog-pct[^>]*>[^<]*
+<span id="hs-prog-pct">0%
+---
+PATTERN: [^;\n]{0,180}hs-prog-pct[^;\n]{0,220}
+    var pctEl=document.getElementById('hs-prog-pct')
+    var pctEl=document.getElementById('hs-prog-pct')
+ <span>0 m³</span><span id="hs-prog-pct">0%</span><span id="hs-prog-max">—</span>
+    const pp=document.getElementById('hs-prog-pct')
+ const pp=document.getElementById('hs-prog-pct')
+---
+PATTERN: [^;\n]{0,180}hs-hero-prog-fill[^;\n]{0,220}
+overflow:hidden}.hs-hero-prog-fill{height:100%
+transition:width .8s var(--ease-out)}.hs-hero-prog-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}.hs-hero-prog-fill.crit{background:linear-gradient(90deg,#f87171,#ef4444)}.hs-alerts{display:flex
+.hs-hero-prog-fill,.iot-bar-fill,.prog-fill{transition:width 1s cubic-bezier(.4,0,.2,1),background .5s}
+  #hs-hero .hs-hero-prog-fill{background:linear-gradient(90deg,#ffffff 0%,#8bdcff 100%)
+  #hs-hero .hs-hero-prog-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)
+  #hs-hero .hs-hero-prog-fill.crit{background:linear-gradient(90deg,#f87171,#ef4444)
+  #hs-hero .hs-hero-prog-fill{position:relative
+  #hs-hero .hs-hero-prog-fill::after{content:""
+  #hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00
+  #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f
+  #hs-hero .hs-hero-prog-fill{position:relative
+  #hs-hero .hs-hero-prog-fill::after{content:""
+  #hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00
+  #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f
+  #hs-hero .hs-hero-prog-fill::after{display:none!important}
+ <div class="hs-hero-prog-fill" id="hs-prog-fill" style="width:0%"></div>
+fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'')
+fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'')
+---
+PATTERN: [^;\n]{0,180}style\.width[^;\n]{0,220}
+  prog.style.width='100%'
+      prog.style.width='0%'
+    if(fill){fill.style.width=pf.toFixed(1)+'%'
+    if(heroProgFill){heroProgFill.style.width=Math.min(100,_pctNum)+'%'
+ if(fill){fill.style.width=pf.toFixed(1)+'%'
+    document.getElementById('ob-progress').style.width=((idx+2)/steps.length*100)+'%'
+  if(progFill){progFill.style.width=pct.toFixed(1)+'%'
+    bar.style.width = pct + '%'
+    barUp.style.width = pctUp + '%'
+    barVol.style.width = pctVol + '%'
+    fill.style.width = pct + '%'
+      if (bar) { bar.style.width = pct + '%'
+    if (barPoco) { barPoco.style.width = pPoco + '%'
+    bar.style.width = Math.min(100, nivel || 0) + '%'
+ canvas.style.width=w+'px'
+---
