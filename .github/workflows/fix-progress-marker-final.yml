@@ -1,0 +1,82 @@
+name: Corrige marcador final da barra
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-progress-marker-final.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Aplicar solucao final
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+          p=Path('index.html')
+          html=p.read_text(encoding='utf-8')
+
+          # Remove as tentativas anteriores do marcador, preservando o refino geral do painel.
+          html=re.sub(r'<style>\s*/\* mobile-progress-cursor-v1 \*/.*?</style>\s*','',html,flags=re.S)
+          html=re.sub(r'<style>\s*/\* mobile-progress-cursor-v2 \*/.*?</style>\s*','',html,flags=re.S)
+          html=re.sub(r'<style id="mobile-progress-live-marker-v1">.*?</style>\s*<script>\s*\(function\(\).*?</script>\s*','',html,flags=re.S)
+
+          marker='/* mobile-progress-marker-final */'
+          if marker not in html:
+              css='''
+<style>
+/* mobile-progress-marker-final */
+@media (max-width:600px){
+  #hs-hero .hs-hero-prog{
+    overflow:visible!important;
+    position:relative;
+  }
+  #hs-hero .hs-hero-prog-fill{
+    position:relative!important;
+    overflow:visible!important;
+  }
+  #hs-hero .hs-hero-prog-fill::after{
+    content:""!important;
+    display:block!important;
+    position:absolute!important;
+    right:-9px!important;
+    left:auto!important;
+    top:50%!important;
+    width:18px!important;
+    height:18px!important;
+    transform:translateY(-50%)!important;
+    border-radius:50%!important;
+    background:#0b5963!important;
+    border:3px solid #8cecf3!important;
+    box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28)!important;
+    z-index:6!important;
+    pointer-events:none!important;
+  }
+  #hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00!important;border-color:#ffd27a!important}
+  #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f!important;border-color:#ffb0b0!important}
+}
+</style>
+'''
+              html=html.replace('</head>',css+'\n</head>',1)
+
+          p.write_text(html,encoding='utf-8')
+
+      - name: Limpar arquivos temporarios de inspecao
+        run: |
+          rm -f progress-inspect.txt progress-exact.txt
+          rm -f .github/workflows/inspect-progress-dom.yml .github/workflows/inspect-progress-exact.yml
+          rm -f .github/workflows/fix-progress-marker-final.yml
+
+      - name: Commit final
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Faz marcador acompanhar o preenchimento real da barra" || exit 0
+          git push
