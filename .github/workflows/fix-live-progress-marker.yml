@@ -20,69 +20,14 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-
+          import base64
           path = Path('index.html')
           html = path.read_text(encoding='utf-8')
           marker = 'mobile-progress-live-marker-v1'
-          if marker in html:
-              raise SystemExit(0)
-
-          patch = r'''
-<style id="mobile-progress-live-marker-v1">
-@media (max-width:600px){
-  #hs-hero .hs-hero-prog{position:relative;overflow:visible!important}
-  #hs-hero .hs-hero-prog-fill::after{display:none!important}
-  #hs-hero .hs-progress-cursor-live{
-    position:absolute;
-    top:50%;
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    background:#0b5963;
-    border:3px solid #8cecf3;
-    box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28);
-    transform:translate(-50%,-50%);
-    z-index:5;
-    pointer-events:none;
-    transition:left .8s cubic-bezier(.22,1,.36,1);
-  }
-}
-</style>
-<script>
-(function(){
-  function syncHsProgressCursor(){
-    var track=document.querySelector('#hs-hero .hs-hero-prog');
-    var pctEl=document.getElementById('hs-prog-pct');
-    if(!track||!pctEl) return;
-    var pct=parseFloat(String(pctEl.textContent||'').replace(',','.'));
-    if(!isFinite(pct)) pct=0;
-    pct=Math.max(0,Math.min(100,pct));
-    var dot=track.querySelector('.hs-progress-cursor-live');
-    if(!dot){
-      dot=document.createElement('span');
-      dot.className='hs-progress-cursor-live';
-      track.appendChild(dot);
-    }
-    dot.style.left=pct+'%';
-    dot.setAttribute('aria-hidden','true');
-  }
-  function start(){
-    syncHsProgressCursor();
-    var pctEl=document.getElementById('hs-prog-pct');
-    if(pctEl && window.MutationObserver){
-      new MutationObserver(syncHsProgressCursor).observe(pctEl,{childList:true,subtree:true,characterData:true});
-    }
-    setInterval(syncHsProgressCursor,500);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
-  else start();
-})();
-</script>
-'''
-          if '</head>' not in html:
-              raise SystemExit('Nao encontrei </head>')
-          html = html.replace('</head>', patch + '\n</head>', 1)
-          path.write_text(html, encoding='utf-8')
+          if marker not in html:
+              patch = base64.b64decode('CjxzdHlsZSBpZD0ibW9iaWxlLXByb2dyZXNzLWxpdmUtbWFya2VyLXYxIj4KQG1lZGlhIChtYXgtd2lkdGg6NjAwcHgpewogICNocy1oZXJvIC5ocy1oZXJvLXByb2d7cG9zaXRpb246cmVsYXRpdmU7b3ZlcmZsb3c6dmlzaWJsZSFpbXBvcnRhbnR9CiAgI2hzLWhlcm8gLmhzLWhlcm8tcHJvZy1maWxsOjphZnRlcntkaXNwbGF5Om5vbmUhaW1wb3J0YW50fQogICNocy1oZXJvIC5ocy1wcm9ncmVzcy1jdXJzb3ItbGl2ZXsKICAgIHBvc2l0aW9uOmFic29sdXRlOwogICAgdG9wOjUwJTsKICAgIHdpZHRoOjE4cHg7CiAgICBoZWlnaHQ6MThweDsKICAgIGJvcmRlci1yYWRpdXM6NTAlOwogICAgYmFja2dyb3VuZDojMGI1OTYzOwogICAgYm9yZGVyOjNweCBzb2xpZCAjOGNlY2YzOwogICAgYm94LXNoYWRvdzowIDAgMCAycHggcmdiYSgxMSw4OSw5OSwuMjgpLDAgMnB4IDhweCByZ2JhKDAsMCwwLC4yOCk7CiAgICB0cmFuc2Zvcm06dHJhbnNsYXRlKC01MCUsLTUwJSk7CiAgICB6LWluZGV4OjU7CiAgICBwb2ludGVyLWV2ZW50czpub25lOwogICAgdHJhbnNpdGlvbjpsZWZ0IC44cyBjdWJpYy1iZXppZXIoLjIyLDEsLjM2LDEpOwogIH0KfQo8L3N0eWxlPgo8c2NyaXB0PgooZnVuY3Rpb24oKXsKICBmdW5jdGlvbiBzeW5jSHNQcm9ncmVzc0N1cnNvcigpewogICAgdmFyIHRyYWNrPWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNocy1oZXJvIC5ocy1oZXJvLXByb2cnKTsKICAgIHZhciBwY3RFbD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnaHMtcHJvZy1wY3QnKTsKICAgIGlmKCF0cmFja3x8IXBjdEVsKSByZXR1cm47CiAgICB2YXIgcGN0PXBhcnNlRmxvYXQoU3RyaW5nKHBjdEVsLnRleHRDb250ZW50fHwnJykucmVwbGFjZSgnLCcsJy4nKSk7CiAgICBpZighaXNGaW5pdGUocGN0KSkgcGN0PTA7CiAgICBwY3Q9TWF0aC5tYXgoMCxNYXRoLm1pbigxMDAscGN0KSk7CiAgICB2YXIgZG90PXRyYWNrLnF1ZXJ5U2VsZWN0b3IoJy5ocy1wcm9ncmVzcy1jdXJzb3ItbGl2ZScpOwogICAgaWYoIWRvdCl7CiAgICAgIGRvdD1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzcGFuJyk7CiAgICAgIGRvdC5jbGFzc05hbWU9J2hzLXByb2dyZXNzLWN1cnNvci1saXZlJzsKICAgICAgdHJhY2suYXBwZW5kQ2hpbGQoZG90KTsKICAgIH0KICAgIGRvdC5zdHlsZS5sZWZ0PXBjdCsnJSc7CiAgICBkb3Quc2V0QXR0cmlidXRlKCdhcmlhLWhpZGRlbicsJ3RydWUnKTsKICB9CiAgZnVuY3Rpb24gc3RhcnQoKXsKICAgIHN5bmNIc1Byb2dyZXNzQ3Vyc29yKCk7CiAgICB2YXIgcGN0RWw9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hzLXByb2ctcGN0Jyk7CiAgICBpZihwY3RFbCAmJiB3aW5kb3cuTXV0YXRpb25PYnNlcnZlcil7CiAgICAgIG5ldyBNdXRhdGlvbk9ic2VydmVyKHN5bmNIc1Byb2dyZXNzQ3Vyc29yKS5vYnNlcnZlKHBjdEVsLHtjaGlsZExpc3Q6dHJ1ZSxzdWJ0cmVlOnRydWUsY2hhcmFjdGVyRGF0YTp0cnVlfSk7CiAgICB9CiAgICBzZXRJbnRlcnZhbChzeW5jSHNQcm9ncmVzc0N1cnNvciw1MDApOwogIH0KICBpZihkb2N1bWVudC5yZWFkeVN0YXRlPT09J2xvYWRpbmcnKSBkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCdET01Db250ZW50TG9hZGVkJyxzdGFydCk7CiAgZWxzZSBzdGFydCgpOwp9KSgpOwo8L3NjcmlwdD4K').decode('utf-8')
+              html = html.replace('</head>', patch + '\n</head>', 1)
+              path.write_text(html, encoding='utf-8')
           PY
 
       - name: Remover workflow temporario
