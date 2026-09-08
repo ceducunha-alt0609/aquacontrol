@@ -16,8 +16,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Injetar cliente de atualização
-        shell: python
+        shell: bash
         run: |
+          python3 - <<'PY'
           from pathlib import Path
           p=Path('index.html')
           html=p.read_text(encoding='utf-8')
@@ -59,6 +60,7 @@ jobs:
 '''
               html=html.replace('</body>',script+'\n</body>',1)
               p.write_text(html,encoding='utf-8')
+          PY
 
       - name: Remover workflow temporario
         run: rm -f .github/workflows/add-auto-update-client.yml
