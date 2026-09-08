@@ -1,0 +1,98 @@
+name: Corrige marcador dinamico da barra
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-live-progress-marker.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar marcador dinamico
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          marker = 'mobile-progress-live-marker-v1'
+          if marker in html:
+              raise SystemExit(0)
+
+          patch = r'''
+<style id="mobile-progress-live-marker-v1">
+@media (max-width:600px){
+  #hs-hero .hs-hero-prog{position:relative;overflow:visible!important}
+  #hs-hero .hs-hero-prog-fill::after{display:none!important}
+  #hs-hero .hs-progress-cursor-live{
+    position:absolute;
+    top:50%;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#0b5963;
+    border:3px solid #8cecf3;
+    box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28);
+    transform:translate(-50%,-50%);
+    z-index:5;
+    pointer-events:none;
+    transition:left .8s cubic-bezier(.22,1,.36,1);
+  }
+}
+</style>
+<script>
+(function(){
+  function syncHsProgressCursor(){
+    var track=document.querySelector('#hs-hero .hs-hero-prog');
+    var pctEl=document.getElementById('hs-prog-pct');
+    if(!track||!pctEl) return;
+    var pct=parseFloat(String(pctEl.textContent||'').replace(',','.'));
+    if(!isFinite(pct)) pct=0;
+    pct=Math.max(0,Math.min(100,pct));
+    var dot=track.querySelector('.hs-progress-cursor-live');
+    if(!dot){
+      dot=document.createElement('span');
+      dot.className='hs-progress-cursor-live';
+      track.appendChild(dot);
+    }
+    dot.style.left=pct+'%';
+    dot.setAttribute('aria-hidden','true');
+  }
+  function start(){
+    syncHsProgressCursor();
+    var pctEl=document.getElementById('hs-prog-pct');
+    if(pctEl && window.MutationObserver){
+      new MutationObserver(syncHsProgressCursor).observe(pctEl,{childList:true,subtree:true,characterData:true});
+    }
+    setInterval(syncHsProgressCursor,500);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start);
+  else start();
+})();
+</script>
+'''
+          if '</head>' not in html:
+              raise SystemExit('Nao encontrei </head>')
+          html = html.replace('</head>', patch + '\n</head>', 1)
+          path.write_text(html, encoding='utf-8')
+          PY
+
+      - name: Remover workflow temporario
+        run: rm -f .github/workflows/fix-live-progress-marker.yml
+
+      - name: Commit da correcao
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/fix-live-progress-marker.yml
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Faz cursor acompanhar percentual consumido no mobile"
+          git push
