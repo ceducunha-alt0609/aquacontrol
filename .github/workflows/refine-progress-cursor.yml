@@ -1,0 +1,67 @@
+name: Refino cursor barra mobile
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/refine-progress-cursor.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar cursor azul petroleo
+        shell: python
+        run: |
+          from pathlib import Path
+          path = Path('index.html')
+          html = path.read_text(encoding='utf-8')
+          marker = '/* mobile-progress-cursor-v1 */'
+          if marker not in html:
+              css = r'''
+<style>
+/* mobile-progress-cursor-v1 */
+@media (max-width:600px){
+  #hs-hero .hs-hero-prog-fill{position:relative;overflow:visible}
+  #hs-hero .hs-hero-prog-fill::after{
+    content:'';
+    position:absolute;
+    right:-7px;
+    top:50%;
+    transform:translateY(-50%);
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#0f5f6d;
+    border:2px solid #7fe7f2;
+    box-shadow:0 0 0 2px rgba(15,95,109,.22),0 2px 8px rgba(0,0,0,.24);
+  }
+  #hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00;border-color:#ffd27a}
+  #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f;border-color:#ffb0b0}
+}
+</style>
+'''
+              if '</head>' not in html:
+                  raise SystemExit('Nao encontrei </head> em index.html')
+              html = html.replace('</head>', css + '\n</head>', 1)
+              path.write_text(html, encoding='utf-8')
+
+      - name: Remover workflow temporario
+        run: rm -f .github/workflows/refine-progress-cursor.yml
+
+      - name: Commit do refino
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/refine-progress-cursor.yml
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao necessaria"
+            exit 0
+          fi
+          git commit -m "Destaca cursor da barra de consumo no mobile"
+          git push
