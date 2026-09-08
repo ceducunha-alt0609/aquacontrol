@@ -1493,6 +1493,16 @@ tbody tr:hover{background:linear-gradient(90deg,rgba(0,82,181,.08),rgba(106,175,
   #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f;border-color:#ffb0b0}
 }
 </style>
+<style>
+/* mobile-progress-cursor-v2 */
+@media (max-width:600px){
+  #hs-hero .hs-hero-prog{overflow:visible;position:relative}
+  #hs-hero .hs-hero-prog-fill{position:relative;overflow:visible}
+  #hs-hero .hs-hero-prog-fill::after{content:"";position:absolute;right:-9px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:#0b5963;border:3px solid #8cecf3;box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28);z-index:2}
+  #hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00;border-color:#ffd27a}
+  #hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f;border-color:#ffb0b0}
+}
+</style>
 </head>
 <body>
 <div id="app-splash">
