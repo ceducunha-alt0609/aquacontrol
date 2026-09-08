@@ -19,28 +19,17 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
-          p = Path('index.html')
-          html = p.read_text(encoding='utf-8')
-          html = re.sub(r'<style>\s*/\* mobile-progress-cursor-v1 \*/.*?</style>\s*', '', html, flags=re.S)
-          html = re.sub(r'<style>\s*/\* mobile-progress-cursor-v2 \*/.*?</style>\s*', '', html, flags=re.S)
-          html = re.sub(r'<style id="mobile-progress-live-marker-v1">.*?</style>\s*<script>.*?</script>\s*', '', html, flags=re.S)
-          marker = '/* mobile-progress-marker-final */'
+          import re, base64
+          p=Path('index.html')
+          html=p.read_text(encoding='utf-8')
+          html=re.sub(r'<style>\s*/\* mobile-progress-cursor-v1 \*/.*?</style>\s*','',html,flags=re.S)
+          html=re.sub(r'<style>\s*/\* mobile-progress-cursor-v2 \*/.*?</style>\s*','',html,flags=re.S)
+          html=re.sub(r'<style id="mobile-progress-live-marker-v1">.*?</style>\s*<script>.*?</script>\s*','',html,flags=re.S)
+          marker='/* mobile-progress-marker-final */'
           if marker not in html:
-              css = """
-<style>
-/* mobile-progress-marker-final */
-@media (max-width:600px){
-#hs-hero .hs-hero-prog{overflow:visible!important;position:relative}
-#hs-hero .hs-hero-prog-fill{position:relative!important;overflow:visible!important}
-#hs-hero .hs-hero-prog-fill::after{content:\"\"!important;display:block!important;position:absolute!important;right:-9px!important;left:auto!important;top:50%!important;width:18px!important;height:18px!important;transform:translateY(-50%)!important;border-radius:50%!important;background:#0b5963!important;border:3px solid #8cecf3!important;box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28)!important;z-index:6!important;pointer-events:none!important}
-#hs-hero .hs-hero-prog-fill.warn::after{background:#b36a00!important;border-color:#ffd27a!important}
-#hs-hero .hs-hero-prog-fill.crit::after{background:#9f1f1f!important;border-color:#ffb0b0!important}
-}
-</style>
-"""
-              html = html.replace('</head>', css + '\n</head>', 1)
-          p.write_text(html, encoding='utf-8')
+              css=base64.b64decode('PHN0eWxlPgovKiBtb2JpbGUtcHJvZ3Jlc3MtbWFya2VyLWZpbmFsICovCkBtZWRpYSAobWF4LXdpZHRoOjYwMHB4KXsKI2hzLWhlcm8gLmhzLWhlcm8tcHJvZ3tvdmVyZmxvdzp2aXNpYmxlIWltcG9ydGFudDtwb3NpdGlvbjpyZWxhdGl2ZX0KI2hzLWhlcm8gLmhzLWhlcm8tcHJvZy1maWxse3Bvc2l0aW9uOnJlbGF0aXZlIWltcG9ydGFudDtvdmVyZmxvdzp2aXNpYmxlIWltcG9ydGFudH0KI2hzLWhlcm8gLmhzLWhlcm8tcHJvZy1maWxsOjphZnRlcntjb250ZW50OiIiIWltcG9ydGFudDtkaXNwbGF5OmJsb2NrIWltcG9ydGFudDtwb3NpdGlvbjphYnNvbHV0ZSFpbXBvcnRhbnQ7cmlnaHQ6LTlweCFpbXBvcnRhbnQ7bGVmdDphdXRvIWltcG9ydGFudDt0b3A6NTAlIWltcG9ydGFudDt3aWR0aDoxOHB4IWltcG9ydGFudDtoZWlnaHQ6MThweCFpbXBvcnRhbnQ7dHJhbnNmb3JtOnRyYW5zbGF0ZVkoLTUwJSkhaW1wb3J0YW50O2JvcmRlci1yYWRpdXM6NTAlIWltcG9ydGFudDtiYWNrZ3JvdW5kOiMwYjU5NjMhaW1wb3J0YW50O2JvcmRlcjozcHggc29saWQgIzhjZWNmMyFpbXBvcnRhbnQ7Ym94LXNoYWRvdzowIDAgMCAycHggcmdiYSgxMSw4OSw5OSwuMjgpLDAgMnB4IDhweCByZ2JhKDAsMCwwLC4yOCkhaW1wb3J0YW50O3otaW5kZXg6NiFpbXBvcnRhbnQ7cG9pbnRlci1ldmVudHM6bm9uZSFpbXBvcnRhbnR9CiNocy1oZXJvIC5ocy1oZXJvLXByb2ctZmlsbC53YXJuOjphZnRlcntiYWNrZ3JvdW5kOiNiMzZhMDAhaW1wb3J0YW50O2JvcmRlci1jb2xvcjojZmZkMjdhIWltcG9ydGFudH0KI2hzLWhlcm8gLmhzLWhlcm8tcHJvZy1maWxsLmNyaXQ6OmFmdGVye2JhY2tncm91bmQ6IzlmMWYxZiFpbXBvcnRhbnQ7Ym9yZGVyLWNvbG9yOiNmZmIwYjAhaW1wb3J0YW50fQp9Cjwvc3R5bGU+Cg==').decode('utf-8')
+              html=html.replace('</head>',css+'\n</head>',1)
+          p.write_text(html,encoding='utf-8')
           PY
       - name: Limpar temporarios
         run: |
