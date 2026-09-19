@@ -1495,6 +1495,23 @@ tbody tr:hover{background:linear-gradient(90deg,rgba(0,82,181,.08),rgba(106,175,
 }
 </style>
 
+
+<style>
+/* mobile-progress-fill-sync-v1 */
+@media (max-width:600px){
+  /* O preenchimento e o marcador pertencem ao mesmo elemento: a largura calculada
+     (consumo / limite) passa a comandar visualmente os dois, sem faixa "parada". */
+  #hs-hero .hs-hero-prog-fill{
+    background:linear-gradient(90deg,#168bd2 0%,#45c8ee 72%,#8cecf3 100%)!important;
+    background-size:100% 100%!important;
+    background-position:left center!important;
+    background-repeat:no-repeat!important;
+  }
+  #hs-hero .hs-hero-prog-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)!important}
+  #hs-hero .hs-hero-prog-fill.crit{background:linear-gradient(90deg,#f87171,#ef4444)!important}
+}
+</style>
+
 </head>
 <body>
 <div id="app-splash">
