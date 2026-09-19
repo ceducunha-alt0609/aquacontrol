@@ -1512,6 +1512,7 @@ tbody tr:hover{background:linear-gradient(90deg,rgba(0,82,181,.08),rgba(106,175,
 }
 </style>
 
+<style>/* mobile-progress-v2 */@media(max-width:600px){#hs-hero .hs-hero-prog{overflow:hidden!important;position:relative!important}#hs-hero .hs-hero-prog-fill{position:absolute!important;left:0!important;top:0!important;bottom:0!important;height:auto!important;z-index:1!important;background:#168bd2!important;box-shadow:none!important;border-radius:4px!important}#hs-hero .hs-hero-prog-fill::after{display:none!important;content:none!important}#hs-hero .hs-hero-prog-marker{display:block;position:absolute;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);border-radius:50%;background:#0b5963;border:3px solid #8cecf3;box-shadow:0 0 0 2px rgba(11,89,99,.28),0 2px 8px rgba(0,0,0,.28);z-index:6;pointer-events:none;transition:left 1s cubic-bezier(.4,0,.2,1)}#hs-hero .hs-hero-prog-fill.warn{background:#f59e0b!important}#hs-hero .hs-hero-prog-fill.crit{background:#ef4444!important}#hs-hero .hs-hero-prog-marker.warn{background:#b36a00;border-color:#ffd27a}#hs-hero .hs-hero-prog-marker.crit{background:#9f1f1f;border-color:#ffb0b0}}</style>
 </head>
 <body>
 <div id="app-splash">
@@ -1867,8 +1868,9 @@ tbody tr:hover{background:linear-gradient(90deg,rgba(0,82,181,.08),rgba(106,175,
  <div class="hs-hero-prog-meta">
  <span>0 m³</span><span id="hs-prog-pct">0%</span><span id="hs-prog-max">—</span>
  </div>
- <div class="hs-hero-prog">
+ <div class="hs-hero-prog" id="hs-prog-track">
  <div class="hs-hero-prog-fill" id="hs-prog-fill" style="width:0%"></div>
+ <div class="hs-hero-prog-marker" id="hs-prog-marker" style="left:0%"></div>
  </div>
  </div>
  </div>
@@ -6372,6 +6374,7 @@ function _updateDashBackground(){
     const pf=Math.min(100,pctMeta);
     const fill=document.getElementById('hs-prog-fill');
     if(fill){fill.style.width=pf.toFixed(1)+'%';fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'');}
+ const marker=document.getElementById('hs-prog-marker');if(marker){marker.style.left=pf.toFixed(1)+'%';marker.className='hs-hero-prog-marker'+(pf>=90?' crit':pf>=75?' warn':'');}
     const pp=document.getElementById('hs-prog-pct');if(pp)pp.textContent=Math.round(pf)+'%';
     const pw=document.getElementById('hs-prog-wrap');if(pw)pw.style.display='block';
   }
@@ -8856,6 +8859,7 @@ function renderDash(){
  const pf=Math.min(100,pctMeta);
  const fill=document.getElementById('hs-prog-fill');
  if(fill){fill.style.width=pf.toFixed(1)+'%';fill.className='hs-hero-prog-fill'+(pf>=90?' crit':pf>=75?' warn':'');}
+ const marker=document.getElementById('hs-prog-marker');if(marker){marker.style.left=pf.toFixed(1)+'%';marker.className='hs-hero-prog-marker'+(pf>=90?' crit':pf>=75?' warn':'');}
  const pp=document.getElementById('hs-prog-pct');if(pp)pp.textContent=Math.round(pf)+'%';
  const pmx=document.getElementById('hs-prog-max');if(pmx)pmx.textContent='limite: '+meta+' m³';
  }
